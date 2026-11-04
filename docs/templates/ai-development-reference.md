@@ -2,10 +2,10 @@
 
 **Purpose:** Portable context document for any contributor or agent continuing development of this project.
 
-**Project:** [Full project name]  
-**Application approach:** [One-sentence summary of the technical approach, key technology choices, and any intentional constraints — e.g., "Deterministic internal React web application backed by a relational database and API" or "CLI tool written in Go with SQLite storage."]  
-**Current checkpoint:** `[commit hash] — [Short checkpoint description]`  
-**Current implementation state:** [Which development steps are completed, in progress, or partial. Be specific about what is and is not yet implemented.]  
+**Project:** [Full project name]
+**Application approach:** [One-sentence summary of the technical approach, key technology choices, and any intentional constraints — e.g., "Deterministic internal React web application backed by a relational database and API" or "CLI tool written in Go with SQLite storage."]
+**Current checkpoint:** `[commit hash] — [Short checkpoint description]`
+**Current implementation state:** [Which development steps are completed, in progress, or partial. Be specific about what is and is not yet implemented.]
 **Explicit scope boundary:** [Any features, sections, or development steps that are deferred, removed, or out of scope. State the authority required to change these boundaries — e.g., "Do not begin [feature] unless the project owner later authorizes it."]
 
 ## Source of truth
@@ -60,7 +60,7 @@
 | `[hash]` | Development Step 1 — [description] |
 | `[hash]` | Development Step 2 — [description] |
 
-**Project directory:** `[absolute path to the managed project directory]`  
+**Project directory:** `[absolute path to the managed project directory]`
 **Recovery source of truth:** [Identify the branch or location that serves as the recovery baseline — e.g., "The Git `main` branch is the recovery source of truth."]
 
 ## Handoff instructions for a new contributor
