@@ -17,7 +17,7 @@ pre-commit install
 tools/
 ├── src/           # Source code for tools and utilities
 ├── tests/         # Test suites
-├── docs/          # Documentation
+├── docs/          # Documentation and architecture decision records
 ├── .github/       # GitHub configuration (CI, templates, workflows)
 └── scripts/       # Build, setup, and helper scripts
 ```
@@ -25,6 +25,10 @@ tools/
 ## Usage
 
 See individual tool documentation in the `docs/` directory.
+
+## Architecture Decisions
+
+Significant decisions are recorded as ADRs in [`docs/adr/`](docs/adr/).
 
 ## Contributing
 
