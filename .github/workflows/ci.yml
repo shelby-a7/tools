@@ -28,7 +28,7 @@ jobs:
         run: echo "CI pipeline ready — add test steps when first tool is added"
 
       - name: Check CI box in PR description
-        if: github.event_name == 'pull_request'
+        if: success() && github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
