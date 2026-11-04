@@ -14,9 +14,9 @@
 
 ## Testing
 
-<!-- How was this tested? -->
+<!-- CI auto-checks its box when tests pass -->
 
-- [ ] Tests pass locally
+- [ ] CI passes
 - [ ] New tests added for changed behavior
 - [ ] Manual verification completed
 
