@@ -19,12 +19,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # TODO: Add language-specific setup and test steps once
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run pre-commit checks
+        uses: pre-commit/action@v3.0.1
+
+      # TODO: Add language-specific test steps once
       # the first tool is added. Example for Python:
       #
-      # - uses: actions/setup-python@v5
-      #   with:
-      #     python-version: '3.12'
       # - run: pip install -r requirements.txt
       # - run: pytest tests/
 
