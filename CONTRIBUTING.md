@@ -21,20 +21,25 @@ Thank you for your interest in contributing. This guide explains how to propose 
    ```bash
    git checkout -b feat/your-feature-name
    ```
-2. **Make your changes** following the coding standards below.
-3. **Write or update tests** for any changed behavior.
-4. **Run the test suite** locally before pushing:
+2. **Install pre-commit hooks** (first time only):
+   ```bash
+   pip install pre-commit
+   pre-commit install
+   ```
+3. **Make your changes** following the coding standards below.
+4. **Write or update tests** for any changed behavior.
+5. **Run the test suite** locally before pushing:
    ```bash
    # Run tests
    cd tests && run your test command
    ```
-5. **Commit** with a clear message following [Conventional Commits](https://www.conventionalcommits.org/):
+6. **Commit** with a clear message following [Conventional Commits](https://www.conventionalcommits.org/):
    ```
    feat: add csv export utility
    fix: handle empty input in parser
    docs: update installation instructions
    ```
-6. **Push** your branch and open a pull request against `main`.
+7. **Push** your branch and open a pull request against `main`.
 
 ## Branch Naming
 
