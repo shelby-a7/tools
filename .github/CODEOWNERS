@@ -1,0 +1,6 @@
+# Default owner for everything in the repo
+* @shelby-a7
+
+# Ownership can be refined per directory as the team grows:
+# /src/tool-name/   @shelby-a7/team-name
+# /docs/            @shelby-a7
