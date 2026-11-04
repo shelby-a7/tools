@@ -17,7 +17,7 @@ pre-commit install
 tools/
 ├── src/           # Source code for tools and utilities
 ├── tests/         # Test suites
-├── docs/          # Documentation and architecture decision records
+├── docs/          # Documentation, ADRs, and templates
 ├── .github/       # GitHub configuration (CI, templates, workflows)
 └── scripts/       # Build, setup, and helper scripts
 ```
@@ -25,6 +25,10 @@ tools/
 ## Usage
 
 See individual tool documentation in the `docs/` directory.
+
+## Templates
+
+- **[AI Development Reference](docs/templates/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
 
 ## Architecture Decisions
 
