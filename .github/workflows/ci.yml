@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -23,3 +30,13 @@ jobs:
 
       - name: Placeholder
         run: echo "CI pipeline ready — add test steps when first tool is added"
+
+      - name: Check CI box in PR description
+        if: success() && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BODY=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} --jq '.body')
+          UPDATED=$(echo "$BODY" | sed 's/- \[ \] CI passes/- [x] CI passes/')
+          gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} \
+            -X PATCH -f body="$UPDATED"
