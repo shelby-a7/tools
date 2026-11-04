@@ -7,6 +7,8 @@ Shared tools and utilities for the shelby-a7 organization.
 ```bash
 git clone git@github.com:shelby-a7/tools.git
 cd tools
+pip install pre-commit
+pre-commit install
 ```
 
 ## Repository Structure
