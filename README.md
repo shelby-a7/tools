@@ -15,28 +15,40 @@ pre-commit install
 
 ```
 tools/
-├── src/           # Source code for tools and utilities
-├── tests/         # Test suites
-├── docs/          # Documentation, ADRs, and templates
-├── .github/       # GitHub configuration (CI, templates, workflows)
-└── scripts/       # Build, setup, and helper scripts
+├── docs/
+│   ├── adr/                    # Architecture Decision Records
+│   └── development-resources/  # Development guides and templates
+├── .github/                # CI workflows, issue/PR templates, CODEOWNERS, Dependabot
+├── CHANGELOG.md            # Release history
+├── CONTRIBUTING.md         # Contribution guidelines
+├── SECURITY.md             # Security policy
+└── LICENSE                 # MIT License
 ```
 
-## Usage
+## Development Resources
 
-See individual tool documentation in the `docs/` directory.
-
-## Templates
-
-- **[AI Development Reference](docs/templates/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
+- **[AI Development Reference](docs/development-resources/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
 
 ## Architecture Decisions
 
 Significant decisions are recorded as ADRs in [`docs/adr/`](docs/adr/).
 
+## CI/CD
+
+GitHub Actions workflows are in [`.github/workflows/`](.github/workflows/):
+
+- **ci.yml** — Continuous integration checks
+- **release.yml** — Release automation
+
+Dependency updates are managed by [Dependabot](.github/dependabot.yml).
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for the security policy and how to report vulnerabilities.
+
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes. Release history is tracked in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
