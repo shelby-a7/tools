@@ -15,16 +15,20 @@ pre-commit install
 
 ```
 tools/
-├── src/           # Source code for tools and utilities
-├── tests/         # Test suites
-├── docs/          # Documentation, ADRs, and templates
-├── .github/       # GitHub configuration (CI, templates, workflows)
-└── scripts/       # Build, setup, and helper scripts
+├── docs/
+│   ├── adr/                # Architecture Decision Records
+│   └── templates/          # Reusable project templates
+├── .github/
+│   ├── workflows/          # CI and release workflows
+│   ├── ISSUE_TEMPLATE/     # Bug report and feature request templates
+│   ├── pull_request_template.md
+│   ├── CODEOWNERS
+│   └── dependabot.yml
+├── CHANGELOG.md            # Release history
+├── CONTRIBUTING.md         # Contribution guidelines
+├── SECURITY.md             # Security policy
+└── LICENSE                 # MIT License
 ```
-
-## Usage
-
-See individual tool documentation in the `docs/` directory.
 
 ## Templates
 
@@ -34,9 +38,22 @@ See individual tool documentation in the `docs/` directory.
 
 Significant decisions are recorded as ADRs in [`docs/adr/`](docs/adr/).
 
+## CI/CD
+
+GitHub Actions workflows are in [`.github/workflows/`](.github/workflows/):
+
+- **ci.yml** — Continuous integration checks
+- **release.yml** — Release automation
+
+Dependency updates are managed by [Dependabot](.github/dependabot.yml).
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for the security policy and how to report vulnerabilities.
+
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes. Release history is tracked in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
