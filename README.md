@@ -18,19 +18,14 @@ tools/
 ├── docs/
 │   ├── adr/                    # Architecture Decision Records
 │   └── development-resources/  # Development guides and templates
-├── .github/
-│   ├── workflows/          # CI and release workflows
-│   ├── ISSUE_TEMPLATE/     # Bug report and feature request templates
-│   ├── pull_request_template.md
-│   ├── CODEOWNERS
-│   └── dependabot.yml
+├── .github/                # CI workflows, issue/PR templates, CODEOWNERS, Dependabot
 ├── CHANGELOG.md            # Release history
 ├── CONTRIBUTING.md         # Contribution guidelines
 ├── SECURITY.md             # Security policy
 └── LICENSE                 # MIT License
 ```
 
-## Templates
+## Development Resources
 
 - **[AI Development Reference](docs/development-resources/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
 
