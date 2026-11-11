@@ -19,7 +19,7 @@ tools/
 │   ├── adr/                    # Architecture Decision Records
 │   └── development-resources/  # Development guides and templates
 ├── .github/                # CI workflows, issue/PR templates, CODEOWNERS, Dependabot
-├── CHANGELOG.md            # Release history
+├── CHANGELOG.md            # Changelog policy and format
 ├── CONTRIBUTING.md         # Contribution guidelines
 ├── SECURITY.md             # Security policy
 └── LICENSE                 # MIT License
@@ -48,7 +48,7 @@ See [SECURITY.md](SECURITY.md) for the security policy and how to report vulnera
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes. Release history is tracked in [CHANGELOG.md](CHANGELOG.md).
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes. See [CHANGELOG.md](CHANGELOG.md) for the changelog policy.
 
 ## License
 
