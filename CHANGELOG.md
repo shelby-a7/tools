@@ -40,6 +40,9 @@ All notable changes to this <artifact> will be documented in this file.
 #### Changed
 - Modification to existing behavior.
 
+#### Removed
+- Deprecated feature removed.
+
 ## [1.0.0] - 2026-01-15
 
 ### Added
