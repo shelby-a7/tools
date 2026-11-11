@@ -27,17 +27,18 @@ All notable changes to this <artifact> will be documented in this file.
 
 ## [Unreleased]
 
-### Added
+### 2026-11-11
+
+#### Added
 - New feature or capability.
 
-### Changed
-- Modification to existing behavior.
-
-### Fixed
+#### Fixed
 - Bug fix.
 
-### Removed
-- Deprecated feature removed.
+### 2026-11-04
+
+#### Changed
+- Modification to existing behavior.
 
 ## [1.0.0] - 2026-01-15
 
@@ -45,7 +46,9 @@ All notable changes to this <artifact> will be documented in this file.
 - Initial release.
 ```
 
-Use `[Unreleased]` for changes that haven't shipped yet. When a version is released, move unreleased entries under a versioned heading with the release date.
+Entries under `[Unreleased]` are grouped by the date they were logged, most recent first. Use `###` date headings with `####` category headings (`Added`, `Changed`, `Fixed`, `Removed`) beneath them. Multiple entries on the same date go under the same date heading.
+
+When a version is released, collapse the dated groups into a single versioned heading with the release date, using `###` for the category headings.
 
 ## Where changelogs live
 
