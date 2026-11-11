@@ -48,7 +48,7 @@ Run through this list before every push.
 
 1. For every file you added, removed, or modified: verify the `README.md` in that file's folder reflects the change. Update it if not.
 2. New folders include a `README.md`.
-3. New folders that contain a library, API, or version-numbered artifact include a `CHANGELOG.md` with the format defined in the root `CHANGELOG.md`.
+3. New folders that produce an artifact subject to any of the changelog criteria (see [Changelog responsibility](#changelog-responsibility)) include a `CHANGELOG.md` with the format defined in the root `CHANGELOG.md`.
 4. File names follow the repository's naming conventions.
 4. Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/).
 5. Use `.github/pull_request_template.md` when opening pull requests.
