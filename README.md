@@ -16,8 +16,8 @@ pre-commit install
 ```
 tools/
 ├── docs/
-│   ├── adr/                # Architecture Decision Records
-│   └── templates/          # Reusable project templates
+│   ├── adr/                    # Architecture Decision Records
+│   └── development-resources/  # Development guides and templates
 ├── .github/
 │   ├── workflows/          # CI and release workflows
 │   ├── ISSUE_TEMPLATE/     # Bug report and feature request templates
@@ -32,7 +32,7 @@ tools/
 
 ## Templates
 
-- **[AI Development Reference](docs/templates/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
+- **[AI Development Reference](docs/development-resources/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
 
 ## Architecture Decisions
 
