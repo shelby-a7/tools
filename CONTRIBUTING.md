@@ -28,18 +28,19 @@ Thank you for your interest in contributing. This guide explains how to propose 
    ```
 3. **Make your changes** following the coding standards below.
 4. **Write or update tests** for any changed behavior.
-5. **Run the test suite** locally before pushing:
+5. **Update the changelog** if a consumer would need to know about this change (see [CHANGELOG.md](CHANGELOG.md) for the criteria). Add an entry under `[Unreleased]` in the affected folder's `CHANGELOG.md`.
+6. **Run the test suite** locally before pushing:
    ```bash
    # Run tests
    cd tests && run your test command
    ```
-6. **Commit** with a clear message following [Conventional Commits](https://www.conventionalcommits.org/):
+7. **Commit** with a clear message following [Conventional Commits](https://www.conventionalcommits.org/):
    ```
    feat: add csv export utility
    fix: handle empty input in parser
    docs: update installation instructions
    ```
-7. **Push** your branch and open a pull request against `main`.
+8. **Push** your branch and open a pull request against `main`.
 
 ## Branch Naming
 

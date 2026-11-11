@@ -25,4 +25,5 @@
 - [ ] Code follows project coding standards
 - [ ] Self-review completed
 - [ ] Documentation updated (if applicable)
+- [ ] Changelog updated (if consumers need to know — see [CHANGELOG.md](../CHANGELOG.md) for criteria)
 - [ ] No secrets or credentials committed
