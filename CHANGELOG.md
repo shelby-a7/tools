@@ -4,7 +4,17 @@ Each folder that produces a versioned or releasable artifact maintains its own `
 
 ## When to update a changelog
 
-Update the folder's `CHANGELOG.md` when a change is **important to someone consuming the artifact** — a new capability, a breaking change, a significant fix, or a deprecation. Routine maintenance, typo fixes, and internal refactors that don't affect consumers do not need an entry.
+Update the folder's `CHANGELOG.md` when a consumer would need to know about the change to use the artifact correctly:
+
+- **Breaking changes** — behavior a consumer depends on now works differently
+- **New capabilities** — something a consumer couldn't do before
+- **Bug fixes consumers might encounter** — a workaround they can drop
+- **Deprecations** — something a consumer uses is going away
+- **Library changes** — a dependency was added, removed, or updated in a way that affects the public interface or minimum requirements
+- **API changes** — an endpoint, parameter, response format, or authentication method was added, modified, or removed
+- **Version-numbered product changes** — any change to a shipped artifact that would appear in release notes for its consumers
+
+Routine maintenance, typo fixes, and internal refactors that don't affect consumers do not need an entry.
 
 ## Format
 

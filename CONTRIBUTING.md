@@ -28,7 +28,7 @@ Thank you for your interest in contributing. This guide explains how to propose 
    ```
 3. **Make your changes** following the coding standards below.
 4. **Write or update tests** for any changed behavior.
-5. **Update the changelog** if your change is significant to consumers of the artifact (see [CHANGELOG.md](CHANGELOG.md) for the policy). Add an entry under `[Unreleased]` in the affected folder's `CHANGELOG.md`.
+5. **Update the changelog** if a consumer would need to know about this change (see [CHANGELOG.md](CHANGELOG.md) for the criteria). Add an entry under `[Unreleased]` in the affected folder's `CHANGELOG.md`.
 6. **Run the test suite** locally before pushing:
    ```bash
    # Run tests
