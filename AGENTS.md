@@ -16,7 +16,7 @@ These instructions apply to every agent and automated task working in this repos
 
 ## Changelog responsibility
 
-Before pushing or opening a pull request, evaluate whether a consumer would need to know about this change to use the artifact correctly. A change requires a changelog entry if it meets any of these criteria:
+After opening a pull request, evaluate whether a consumer would need to know about this change to use the artifact correctly. A change requires a changelog entry if it meets any of these criteria:
 
 - Breaking changes — behavior a consumer depends on now works differently
 - New capabilities — something a consumer couldn't do before
@@ -26,7 +26,7 @@ Before pushing or opening a pull request, evaluate whether a consumer would need
 - API changes — an endpoint, parameter, response format, or authentication method was added, modified, or removed
 - Version-numbered product changes — any change to a shipped artifact that would appear in release notes for its consumers
 
-If the change meets any of these criteria and the affected folder has a `CHANGELOG.md`, add an entry under `[Unreleased]` using the format defined in the root `CHANGELOG.md`. If the folder does not yet have a `CHANGELOG.md` and the artifact has external consumers, create one.
+If the change meets any of these criteria and the affected folder has a `CHANGELOG.md`, add an entry under `[Unreleased]` using the format defined in the root `CHANGELOG.md`. If the folder does not yet have a `CHANGELOG.md` and the artifact has external consumers, create one. Push the changelog update to the PR branch.
 
 If the change does not meet any of these criteria — routine maintenance, internal refactors, typo fixes, CI or infrastructure updates — do not add a changelog entry.
 
@@ -45,11 +45,10 @@ Leave an empty `[Unreleased]` section above it for future entries.
 Run through this list before every push.
 
 1. For every file you added, removed, or modified: verify the `README.md` in that file's folder reflects the change. Update it if not.
-2. For every content change to a folder with a `CHANGELOG.md`: verify the changelog has been updated if the change is significant to consumers.
-3. New folders include a `README.md`.
-4. File names follow the repository's naming conventions.
-5. Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/).
-6. Use `.github/pull_request_template.md` when opening pull requests.
+2. New folders include a `README.md`.
+3. File names follow the repository's naming conventions.
+4. Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/).
+5. Use `.github/pull_request_template.md` when opening pull requests.
 
 ## Scope and safety
 
