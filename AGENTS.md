@@ -1,6 +1,18 @@
 # Agent Instructions
 
-These instructions apply to every agent and automated task working in this repository. Read `CONTRIBUTING.md` and `CHANGELOG.md` before starting work.
+These instructions apply to every agent and automated task working in this repository.
+
+## Required reading order
+
+1. This file (`AGENTS.md`).
+2. `CONTRIBUTING.md`.
+3. `CHANGELOG.md` (changelog policy and format).
+4. `README.md` and the README of any folder you are changing.
+
+## Before starting any work
+
+1. Run `git ls-tree -r --name-only origin/main` to understand the current folder structure.
+2. Follow the branching, commit, and coding standards in `CONTRIBUTING.md`.
 
 ## Changelog responsibility
 
@@ -20,8 +32,19 @@ When tagging a release for an artifact, move all entries under `[Unreleased]` in
 
 Leave an empty `[Unreleased]` section above it for future entries.
 
+## Pre-push checklist
+
+Run through this list before every push.
+
+1. For every file you added, removed, or modified: verify the `README.md` in that file's folder reflects the change. Update it if not.
+2. For every content change to a folder with a `CHANGELOG.md`: verify the changelog has been updated if the change is significant to consumers.
+3. New folders include a `README.md`.
+4. File names follow the repository's naming conventions.
+5. Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/).
+6. Use `.github/pull_request_template.md` when opening pull requests.
+
 ## Scope and safety
 
-- Do not expand scope beyond what was requested.
+- Do not silently expand scope, implement audit recommendations without authorization, or modify product code for documentation-only requests.
 - Preserve existing work in the working tree; do not reset, clean, or overwrite without authorization.
 - Do not expose credentials or copy secret values into files, commands, commits, issues, or pull requests.
