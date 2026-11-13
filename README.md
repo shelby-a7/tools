@@ -28,6 +28,7 @@ tools/
 ## Development Resources
 
 - **[AI Development Reference](docs/development-resources/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
+- **[Tracking Plan Template](docs/development-resources/tracking-plan-template.md)** — Tool-agnostic template for product analytics implementation plans. Covers SDK setup, event taxonomy, phased rollout, QA checklists, and architecture reference.
 
 ## Architecture Decisions
 
