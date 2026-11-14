@@ -40,6 +40,7 @@ Thank you for your interest in contributing. This guide explains how to propose 
    fix: handle empty input in parser
    docs: update installation instructions
    ```
+   To link the work to a Linear issue, add a link line to the commit body (see [Linking Linear Issues](#linking-linear-issues)).
 8. **Push** your branch and open a pull request against `main`.
 
 ## Branch Naming
@@ -60,23 +61,33 @@ Use prefixes to categorize your branch:
 - Keep PRs focused — one logical change per PR.
 - Fill out the PR template completely.
 - Link related GitHub issues using `Closes #123` in the description.
-- Link Linear issues, if any, as described in [Linking Linear Issues](#linking-linear-issues).
+- Link Linear issues from commit messages, not from the pull request (see [Linking Linear Issues](#linking-linear-issues)).
 - All CI checks must pass before merge.
 - At least one approval is required for merge.
 
 ## Linking Linear Issues
 
-Linking a pull request to a Linear issue is optional. A pull request with no linked issue is valid and passes CI.
+Linking work to a Linear issue is optional. A branch with no linked issue is valid and passes CI.
 
-To link, write one line per issue in the "Linear Issue" section of the pull-request description, in the form `<keyword> <ISSUE-ID>` (for example `Part of TEAM-123`):
+To link, add one line per issue at the end of a commit body, in the form `<keyword> <ISSUE-ID>`:
+
+```
+feat: add csv export utility
+
+Adds a streaming CSV writer for large result sets.
+
+Part of TEAM-123
+```
 
 | Keyword | Use when | Effect on the Linear issue |
 |---|---|---|
-| `Closes` | The pull request finishes the issue | Moves to Done on merge |
-| `Part of` | The pull request is partial work | Progresses, but stays open on merge |
-| `Relates to` | The pull request only references the issue | No status change |
+| `Closes` | The work finishes the issue | In Progress when the commit is pushed, Done when it reaches `main` |
+| `Part of` | The work is partial | Progresses, but stays open when the commit reaches `main` |
+| `Relates to` | The work only references the issue | No status change |
 
-The description is the only place to link. Do not put a Linear issue ID in a branch name, pull-request title, or commit message: Linear may treat those as links too, and they bypass the keyword choice.
+Put the link in the first commit on the branch. Later commits do not need to repeat it: a squash merge keeps every commit message, so the line reaches `main`. When squash-merging, keep the link line in the squash commit message.
+
+The commit message is the only place to link. Do not put a Linear issue ID in a branch name, pull-request title, or pull-request description: Linear can link from those too.
 
 ## Coding Standards
 

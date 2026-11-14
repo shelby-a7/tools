@@ -16,24 +16,26 @@ These instructions apply to every agent and automated task working in this repos
 
 ## Linear issue linking
 
-A pull request links to a Linear issue only through a linking keyword plus the issue ID in the pull-request description. Linking is optional: a pull request with no linked issue is valid and passes CI.
+Work links to a Linear issue only through a linking keyword plus the issue ID in a commit message. Linking is optional: a branch with no linked issue is valid and passes CI.
 
-Before opening a pull request, ask the user both questions below. Do not infer the answers from the task, the branch, or a search of Linear.
+Before the first commit on a branch, ask the user both questions below. Do not infer the answers from the task, the branch, or a search of Linear.
 
-1. Which Linear issue, if any, does this pull request link to? (An ID such as `TEAM-123`, several IDs, or none.)
+1. Which Linear issue, if any, does this work link to? (An ID such as `TEAM-123`, several IDs, or none.)
 2. Which linking keyword applies to each issue? Present these options with their helper text:
-   - `Closes` — the pull request finishes the issue. Linear moves the issue to Done when the pull request merges.
-   - `Part of` — the pull request is partial work. The issue progresses but stays open when the pull request merges.
+   - `Closes` — the work finishes the issue. Linear moves the issue to In Progress when the commit is pushed and to Done when it reaches `main`.
+   - `Part of` — the work is partial. The issue progresses but stays open when the commit reaches `main`.
    - `Relates to` — reference only. The issue's status does not change.
 
-Skip a question only when the user has already answered it explicitly for this pull request.
+Skip a question only when the user has already answered it explicitly for this branch.
 
-Then fill in the "Linear Issue" section of `.github/pull_request_template.md`:
+Then write the link in the commit message:
 
-- One line per issue in the form `<keyword> <ISSUE-ID>`, for example `Part of TEAM-123`.
-- `None` when the user says there is no issue, or when no user is available to answer. Report that the pull request was opened without a linked issue.
+- One line per issue in the form `<keyword> <ISSUE-ID>`, each on its own line at the end of the commit body, for example `Part of TEAM-123`.
+- Put the link in the first commit on the branch. Later commits on the same branch do not need to repeat it: a squash merge keeps every commit message, so the line reaches `main`.
+- Add no link line when the user says there is no issue, or when no user is available to answer. Report that the work was committed without a linked issue.
+- When squash-merging, keep the link line in the squash commit message.
 
-Do not put a Linear issue ID in a branch name, pull-request title, or commit message. Linear may treat those as links too, and they bypass the keyword choice.
+Do not put a Linear issue ID in a branch name, pull-request title, or pull-request description. Linear can link from those too, and this repository links through commits only.
 
 ## Changelog responsibility
 

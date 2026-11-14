@@ -8,27 +8,13 @@
 
 -
 
-## Linear Issue
+## Related Issues
 
 <!--
-Optional. To link this pull request to a Linear issue, replace "None" with
-one line per issue in the form: <keyword> <ISSUE-ID>
-
-Choose the keyword by what should happen to the issue:
-- Closes      This pull request finishes the issue. Linear moves it to Done on merge.
-- Part of     Partial work. The issue progresses but stays open on merge.
-- Relates to  Reference only. The issue's status does not change.
-
-No related issue? Leave "None". CI does not require a link.
-Keep the issue ID (<TEAM>-<number>) out of the branch name and pull-request title.
-Linear treats those as links too, and they bypass the keyword choice.
+Link GitHub issues: Closes #123, Relates to #456
+Linear issues are linked from commit messages, not from this pull request.
+See "Linking Linear Issues" in CONTRIBUTING.md.
 -->
-
-None
-
-## Related GitHub Issues
-
-<!-- Optional. Link GitHub issues: Closes #123, Relates to #456 -->
 
 ## Testing
 
