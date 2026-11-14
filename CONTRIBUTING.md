@@ -85,7 +85,9 @@ Part of TEAM-123
 | `Part of` | The work is partial | Progresses, but stays open when the commit reaches `main` |
 | `Relates to` | The work only references the issue | No status change |
 
-Put the link in the first commit on the branch. Later commits do not need to repeat it: a squash merge keeps every commit message, so the line reaches `main`. When squash-merging, keep the link line in the squash commit message.
+The link can go in any commit on the branch, not only the first, and once per branch is enough: a squash merge keeps every commit message, so the line reaches `main`. If the link is decided after work has started, add it to the next commit rather than rewriting earlier ones.
+
+Linear reads a link line when the commit is pushed, so a later commit cannot withdraw it. If the issue or keyword changes, write the corrected line in a new commit and remove the superseded line from the squash commit message when merging. Keep every current link line in that message.
 
 The commit message is the only place to link. Do not put a Linear issue ID in a branch name, pull-request title, or pull-request description: Linear can link from those too.
 
