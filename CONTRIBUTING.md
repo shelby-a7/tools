@@ -59,9 +59,24 @@ Use prefixes to categorize your branch:
 
 - Keep PRs focused — one logical change per PR.
 - Fill out the PR template completely.
-- Link related issues using `Closes #123` in the description.
+- Link related GitHub issues using `Closes #123` in the description.
+- Link Linear issues, if any, as described in [Linking Linear Issues](#linking-linear-issues).
 - All CI checks must pass before merge.
 - At least one approval is required for merge.
+
+## Linking Linear Issues
+
+Linking a pull request to a Linear issue is optional. A pull request with no linked issue is valid and passes CI.
+
+To link, write one line per issue in the "Linear Issue" section of the pull-request description, in the form `<keyword> <ISSUE-ID>` (for example `Part of TEAM-123`):
+
+| Keyword | Use when | Effect on the Linear issue |
+|---|---|---|
+| `Closes` | The pull request finishes the issue | Moves to Done on merge |
+| `Part of` | The pull request is partial work | Progresses, but stays open on merge |
+| `Relates to` | The pull request only references the issue | No status change |
+
+The description is the only place to link. Do not put a Linear issue ID in a branch name, pull-request title, or commit message: Linear may treat those as links too, and they bypass the keyword choice.
 
 ## Coding Standards
 

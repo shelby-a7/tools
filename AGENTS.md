@@ -14,6 +14,27 @@ These instructions apply to every agent and automated task working in this repos
 1. Run `git ls-tree -r --name-only origin/main` to understand the current folder structure.
 2. Follow the branching, commit, and coding standards in `CONTRIBUTING.md`.
 
+## Linear issue linking
+
+A pull request links to a Linear issue only through a linking keyword plus the issue ID in the pull-request description. Linking is optional: a pull request with no linked issue is valid and passes CI.
+
+Before opening a pull request, ask the user both questions below. Do not infer the answers from the task, the branch, or a search of Linear.
+
+1. Which Linear issue, if any, does this pull request link to? (An ID such as `TEAM-123`, several IDs, or none.)
+2. Which linking keyword applies to each issue? Present these options with their helper text:
+   - `Closes` — the pull request finishes the issue. Linear moves the issue to Done when the pull request merges.
+   - `Part of` — the pull request is partial work. The issue progresses but stays open when the pull request merges.
+   - `Relates to` — reference only. The issue's status does not change.
+
+Skip a question only when the user has already answered it explicitly for this pull request.
+
+Then fill in the "Linear Issue" section of `.github/pull_request_template.md`:
+
+- One line per issue in the form `<keyword> <ISSUE-ID>`, for example `Part of TEAM-123`.
+- `None` when the user says there is no issue, or when no user is available to answer. Report that the pull request was opened without a linked issue.
+
+Do not put a Linear issue ID in a branch name, pull-request title, or commit message. Linear may treat those as links too, and they bypass the keyword choice.
+
 ## Changelog responsibility
 
 After opening a pull request, check whether the changed folder contains a `CHANGELOG.md`. If it does, determine whether the change meets any of these criteria:
