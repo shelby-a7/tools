@@ -40,6 +40,7 @@ Thank you for your interest in contributing. This guide explains how to propose 
    fix: handle empty input in parser
    docs: update installation instructions
    ```
+   To link the work to a Linear issue, add a link line to the commit body (see [Linking Linear Issues](#linking-linear-issues)).
 8. **Push** your branch and open a pull request against `main`.
 
 ## Branch Naming
@@ -59,9 +60,36 @@ Use prefixes to categorize your branch:
 
 - Keep PRs focused — one logical change per PR.
 - Fill out the PR template completely.
-- Link related issues using `Closes #123` in the description.
+- Link related GitHub issues using `Closes #123` in the description.
+- Link Linear issues from commit messages, not from the pull request (see [Linking Linear Issues](#linking-linear-issues)).
 - All CI checks must pass before merge.
 - At least one approval is required for merge.
+
+## Linking Linear Issues
+
+Linking work to a Linear issue is optional. A branch with no linked issue is valid and passes CI.
+
+To link, add one line per issue at the end of a commit body, in the form `<keyword> <ISSUE-ID>`:
+
+```
+feat: add csv export utility
+
+Adds a streaming CSV writer for large result sets.
+
+Part of TEAM-123
+```
+
+| Keyword | Use when | Effect on the Linear issue |
+|---|---|---|
+| `Closes` | The work finishes the issue | In Progress when the commit is pushed, Done when it reaches `main` |
+| `Part of` | The work is partial | Progresses, but stays open when the commit reaches `main` |
+| `Relates to` | The work only references the issue | No status change |
+
+The link can go in any commit on the branch, not only the first, and once per branch is enough: a squash merge keeps every commit message, so the line reaches `main`. If the link is decided after work has started, add it to the next commit rather than rewriting earlier ones.
+
+Linear reads a link line when the commit is pushed, so a later commit cannot withdraw it. If the issue or keyword changes, write the corrected line in a new commit and remove the superseded line from the squash commit message when merging. Keep every current link line in that message.
+
+The commit message is the only place to link. Do not put a Linear issue ID in a branch name, pull-request title, or pull-request description: Linear can link from those too.
 
 ## Coding Standards
 

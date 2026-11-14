@@ -10,7 +10,11 @@
 
 ## Related Issues
 
-<!-- Link issues: Closes #123, Relates to #456 -->
+<!--
+Link GitHub issues: Closes #123, Relates to #456
+Linear issues are linked from commit messages, not from this pull request.
+See "Linking Linear Issues" in CONTRIBUTING.md.
+-->
 
 ## Testing
 

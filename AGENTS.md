@@ -14,6 +14,47 @@ These instructions apply to every agent and automated task working in this repos
 1. Run `git ls-tree -r --name-only origin/main` to understand the current folder structure.
 2. Follow the branching, commit, and coding standards in `CONTRIBUTING.md`.
 
+## Linear issue linking
+
+Work links to a Linear issue only through a linking keyword plus the issue ID in a commit message. Linking is optional: a branch with no linked issue is valid and passes CI.
+
+### When to ask
+
+Before your first commit in a task, run `git log origin/main..HEAD` and read the commit messages already on the branch. This applies whether your commit will be the first on the branch or a later one.
+
+- **No link line on the branch:** ask the user both questions below.
+- **A link line already on the branch:** tell the user which issue and keyword it carries, and ask whether your work needs a different or an additional link. If it does not, add nothing.
+
+Do not infer the answers from the task, the branch name, or a search of Linear. Skip a question only when the user has already answered it explicitly for this work.
+
+1. Which Linear issue, if any, does this work link to? (An ID such as `TEAM-123`, several IDs, or none.)
+2. Which linking keyword applies to each issue? Present these options with their helper text:
+   - `Closes` — the work finishes the issue. Linear moves the issue to In Progress when the commit is pushed and to Done when it reaches `main`.
+   - `Part of` — the work is partial. The issue progresses but stays open when the commit reaches `main`.
+   - `Relates to` — reference only. The issue's status does not change.
+
+### Where to write the link
+
+- Write one line per issue in the form `<keyword> <ISSUE-ID>`, each on its own line at the end of the commit body, for example `Part of TEAM-123`.
+- Put it in the next commit you make. Any commit on the branch works, not only the first: a squash merge keeps every commit message, so the line reaches `main`.
+- Write each link once per branch. Do not repeat a line that an earlier commit already carries.
+- Do not amend or rewrite a pushed commit to add a link. If the work is already committed and no further commit is planned, ask the user whether to push an empty commit (`git commit --allow-empty`) that carries the link line.
+- Add no link line when the user says there is no issue, or when no user is available to answer. Report that the work was committed without a linked issue.
+
+### Changing a link
+
+Linear reads a link line when the commit is pushed, so a pushed line cannot be withdrawn by a later commit. If the user changes the issue or the keyword after a link line has been pushed:
+
+1. Write the corrected line in the next commit.
+2. Tell the user that the earlier line is still in the branch history and may already have updated the issue in Linear.
+3. When squash-merging, remove the superseded line from the squash commit message. An earlier `Closes` line left in that message still closes the issue.
+
+### Merging
+
+When squash-merging, keep every current link line in the squash commit message.
+
+Do not put a Linear issue ID in a branch name, pull-request title, or pull-request description. Linear can link from those too, and this repository links through commits only.
+
 ## Changelog responsibility
 
 After opening a pull request, check whether the changed folder contains a `CHANGELOG.md`. If it does, determine whether the change meets any of these criteria:
