@@ -67,9 +67,9 @@ Key events in the taxonomy exist to measure a transition in the product lifecycl
 
 | Funnel Stage | Key Events | Contact Status | Metrics Measured |
 | --- | --- | --- | --- |
-| **Signed Up** | `user_registered` | Anonymous → Registered | Signup conversion rate, time-to-signup |
-| **Activated** | `artifact_created`, `artifact_updated` | Registered → Active | Activation rate, time-to-value |
-| **Subscribed** | `subscription_started` | Active → Paying | Trial-to-paid rate, revenue per user |
+| **Acquisition** | `user_registered` | Anonymous → Registered | Signup conversion rate, time-to-signup |
+| **Activation** | `artifact_created`, `artifact_updated` | Registered → Active | Activation rate, time-to-value |
+| **Revenue** | `subscription_started` | Active → Paying | Trial-to-paid rate, revenue per user |
 | **{STAGE_X}** | `{event_name}` | {status_before} → {status_after} | {metric_1}, {metric_2} |
 | **{STAGE_Y}** | `{event_name}` | {status_before} → {status_after} | {metric_1}, {metric_2} |
 
