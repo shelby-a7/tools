@@ -65,13 +65,13 @@ Implement **product analytics** — not just web analytics — for {APP_NAME}. T
 
 Key events in the taxonomy exist to measure a transition in the product lifecycle. The table below maps each funnel stage to the events that capture it, the user's status at that point, and the business metrics the data feeds.
 
-| Transition | Key Events | Contact Status | Metrics Measured |
+| Funnel Stage | Key Events | Contact Status | Metrics Measured |
 | --- | --- | --- | --- |
-| **Visitor → Signed Up** | `user_registered` | Anonymous → Registered | Signup conversion rate, time-to-signup |
-| **Signed Up → Activated** | `artifact_created`, `artifact_updated` | Registered → Active | Activation rate, time-to-value |
-| **Activated → Subscribed** | `subscription_started` | Active → Paying | Trial-to-paid rate, revenue per user |
-| **{STAGE_X} → {STAGE_Y}** | `{event_name}` | {status_before} → {status_after} | {metric_1}, {metric_2} |
-| **{STAGE_Y} → {STAGE_Z}** | `{event_name}` | {status_before} → {status_after} | {metric_1}, {metric_2} |
+| **Signed Up** | `user_registered` | Anonymous → Registered | Signup conversion rate, time-to-signup |
+| **Activated** | `artifact_created`, `artifact_updated` | Registered → Active | Activation rate, time-to-value |
+| **Subscribed** | `subscription_started` | Active → Paying | Trial-to-paid rate, revenue per user |
+| **{STAGE_X}** | `{event_name}` | {status_before} → {status_after} | {metric_1}, {metric_2} |
+| **{STAGE_Y}** | `{event_name}` | {status_before} → {status_after} | {metric_1}, {metric_2} |
 
 ### Analytics Stack
 
