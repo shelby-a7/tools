@@ -2,7 +2,9 @@
 
 > **How to use this template:** Replace all `{PLACEHOLDER}` values with your project's specifics. Sections marked `[Customize]` need project-specific content. Delete this callout and all template guidance notes before delivering to Engineering.
 
-Production-ready guide for Engineering to implement user-behavior tracking on {APP_NAME}. This tracking plan applies to both the pre-prod and production environments.
+Production-ready guide for Engineering to implement product analytics tracking on {APP_NAME}. This tracking plan applies to both the pre-prod and production environments.
+
+This template was derived from a PostHog implementation on a Next.js web application. Adapt the SDK references, initialization patterns, and event schemas to your analytics platform and framework. Mobile applications have different instrumentation concerns (screen views vs. page views, lifecycle events, deep links) that this template does not cover.
 
 **Stack:** {FRAMEWORK} (e.g. Next.js, Nuxt, React SPA) · {STYLING} (e.g. styled-components, Tailwind) · {INFRASTRUCTURE} (e.g. Apache reverse proxy, Nginx, Vercel)
 
@@ -57,13 +59,15 @@ Shared Reference
 
 ### Goal
 
-Implement **product analytics** — not just web analytics — for {APP_NAME}. The implementation must answer product questions like "{EXAMPLE_PRODUCT_QUESTION_1}" and "{EXAMPLE_PRODUCT_QUESTION_2}". These require user-level identity, persistent user properties, and funnel analysis — capabilities that go beyond page view counts.
+Implement **product analytics** — not just web analytics — for {APP_NAME}. The implementation must answer product questions like "What percentage of users who sign up reach activation within 7 days?" and "Where in the onboarding flow do users drop off before completing their first core action?". These require user-level identity, persistent user properties, and funnel analysis — capabilities that go beyond page view counts.
 
 ### What the Tracking Measures
 
 > `[Customize]` Map each funnel stage to the events that capture it. The table below is a product-led growth (PLG) lifecycle example — adapt the stages, events, and metrics to your product's growth model.
 
 Key events in the taxonomy exist to measure a transition in the product lifecycle. The table below maps each funnel stage to the events that capture it, the user's status at that point, and the business metrics the data feeds.
+
+**Table: PLG Lifecycle Funnel — AARRR Stage Map**
 
 | Funnel Stage | Key Events | Contact Status | Metrics Measured |
 | --- | --- | --- | --- |
