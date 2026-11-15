@@ -26,13 +26,13 @@ Setup (Pre-work)
 
 Phase 1 — Event Implementation
 
-- [Event 1: Page Views (virtual)](#event-1)
-- [Event 2: Button Clicks](#event-2)
-- [Event 3: Modal Lifecycle](#event-3) — *Phase 2 (see Phase 2+)*
-- [Event 4: User Registration, Identification & Account Management](#event-4)
-- [Event 5: Purchases & Subscriptions](#event-5)
-- [Event 6: Product Engagement](#event-6)
-- [Event 7: User Properties Updated](#event-7)
+- [Event 1: User Registration, Identification & Account Management](#event-1)
+- [Event 2: Product Engagement](#event-2)
+- [Event 3: Purchases & Subscriptions](#event-3)
+- [Event 4: User Properties Updated](#event-4)
+- [Event 5: Page Views (virtual)](#event-5)
+- [Event 6: Button Clicks](#event-6)
+- [Event 7: Modal Lifecycle](#event-7) — *Phase 2 (see Phase 2+)*
 
 Phase 1 — Reference
 
@@ -40,9 +40,9 @@ Phase 1 — Reference
 
 Phase 2+ — Event Implementation
 
-- [Event 2: Button Clicks (Phase 2+ track_ids)](#event-2-phase-2)
-- [Event 3: Modal Lifecycle](#event-3-phase-2)
-- [Event 5: {DEFERRED_EVENT_NAME}](#event-5-phase-2)
+- [Event 3: Purchases & Subscriptions (Phase 2+)](#event-3-phase-2)
+- [Event 6: Button Clicks (Phase 2+ track_ids)](#event-6-phase-2)
+- [Event 7: Modal Lifecycle](#event-7-phase-2)
 
 Phase 2+ — Reference
 
@@ -230,7 +230,7 @@ export function initAnalytics() {
 }
 ```
 
-`capture_pageview: false` (or equivalent) is required — we fire page views manually on route changes (Event 1). Without this, the SDK's automatic page view fires only on initial load and misses client-side navigations.
+`capture_pageview: false` (or equivalent) is required — we fire page views manually on route changes (Event 5). Without this, the SDK's automatic page view fires only on initial load and misses client-side navigations.
 
 #### Step 2: Create the server-side analytics client
 
@@ -286,7 +286,7 @@ export default function App({ Component, pageProps }) {
     return () => router.events.off('routeChangeComplete', onRouteChange);
   }, [router.events]);
 
-  // Global click listener for data-track button clicks (Event 2)
+  // Global click listener for data-track button clicks (Event 6)
   useEffect(() => {
     const handleClick = (e) => {
       const el = e.target.closest('[data-track]');
@@ -313,10 +313,10 @@ export default function App({ Component, pageProps }) {
 This single file handles three concerns:
 
 1. **Analytics initialization** — runs once on mount.
-2. **Virtual page views** — fires `$pageview` on every route change (Event 1).
-3. **Button click tracking** — a document-level click listener detects `data-track` attributes and fires `button_clicked` (Event 2).
+2. **Virtual page views** — fires `$pageview` on every route change (Event 5).
+3. **Button click tracking** — a document-level click listener detects `data-track` attributes and fires `button_clicked` (Event 6).
 
-Before implementing: The page view listener uses a route-change event, which only fires on URL path changes. Engineering must review the app's navigation and confirm that every user action intended as a "page view" actually triggers a route change. In-page interactions that don't change the URL (tab switches, accordions, filters) will not be captured as page views — those need `data-track` button clicks (Event 2) or modal events (Event 3) instead.
+Before implementing: The page view listener uses a route-change event, which only fires on URL path changes. Engineering must review the app's navigation and confirm that every user action intended as a "page view" actually triggers a route change. In-page interactions that don't change the URL (tab switches, accordions, filters) will not be captured as page views — those need `data-track` button clicks (Event 6) or modal events (Event 7) instead.
 
 #### Acceptance Criteria: Analytics Loads and Captures
 
@@ -348,102 +348,7 @@ If you skip the auto-page-view disabling: Every page navigation fires twice — 
 
 <a id="event-1"></a>
 
-## Event 1: Page Views (Virtual) — Phase 1
-
-**Why virtual?** Single-page apps (SPAs) handle navigation client-side. Route changes don't trigger a full page load, so the SDK's built-in page view fires only once — on initial load. We capture a page view event on every route change to capture all navigation.
-
-### Engineering
-
-Already done in Pre-work 3. The route-change listener in the app shell handles this. No additional code needed per page.
-
-Engineering must verify: Virtual page views fire on route-change events — meaning they only capture client-side route changes (URL path changes). Confirm that every user action you want tracked as a "page view" actually triggers a route change. Actions that happen within the same page (e.g. tab switches, accordion opens, in-page filtering) do **not** change the URL and will **not** fire a page view. If any key user flows stay on the same route, those interactions need to be tracked via button clicks (Event 2) or modal events (Event 3) instead.
-
-#### What gets captured
-
-```js
-analyticsClient.capture('$pageview', { page_path: '/results' });
-```
-
-#### Acceptance Criteria: Page Views Fire on Every Route
-
-| Check | How to Verify |
-| --- | --- |
-| Page view fires on navigation | Navigate to 3+ pages. In the analytics platform activity feed, you should see one page view event per navigation with a `page_path` matching the URL. |
-| No double-counting | Each navigation produces exactly 1 page view event |
-| Analytics platform receives page views | Events appear in the activity feed within seconds |
-
-<a id="event-2"></a>
-
-## Event 2: Button Clicks — Phase 1 / Phase 2+
-
-> **Phase 1 scope:** Implement the `data-track` attribute infrastructure described below in full — it applies to all tracked buttons. In Phase 1, add `data-track` attributes to the **priority-1 buttons only**: {LIST_PHASE_1_TRACK_IDS}. The remaining `track_id` values (priority 2 and unassigned) are deferred to [Phase 2+](#event-2-phase-2).
-
-**Why `data-track`?** Many modern CSS solutions (styled-components, CSS Modules, Tailwind with purging) generate class names that change between builds. CSS-selector-based click triggers would break silently after every deploy. Instead, Engineering adds stable `data-track` attributes to trackable elements.
-
-### Engineering
-
-The global click listener in the app shell (Pre-work 3) automatically detects clicks on `[data-track]` elements and calls `capture('button_clicked', { track_id, track_location })`. No additional event code is needed per button — Engineering adds HTML attributes only.
-
-#### Add `data-track` attributes to every trackable button
-
-Pattern, not paste: The code below shows the **attribute pattern** to apply to your existing components. The `data-track` values are examples — replace them with the values from your [Event Taxonomy](./taxonomy/). The component names are placeholders for your actual components and handlers. You are adding attributes to existing elements, not creating new components.
-
-```jsx
-// PATTERN: Add data-track to each trackable element.
-// Replace the values with those from the Event Taxonomy.
-//
-// Button INSIDE a modal — add data-track-location manually.
-// The URL doesn't change when a modal opens, so the route fallback
-// would just show the underlying page. The explicit attribute tells
-// analytics this click happened inside the modal, not on the page.
-<Button
-  data-track="submit_payment"               // ← replace with your value from Taxonomy
-  data-track-location="confirm_payment_modal" // ← required: modal has no route
-  onClick={handlePayment}                   // ← your existing handler, unchanged
->
-  Pay now
-</Button>
-
-// Page-level buttons: add data-track only. Do NOT add data-track-location.
-// The click listener automatically captures the current URL path (e.g. /search, /results)
-// as the click's location. Adding data-track-location here would duplicate
-// that and create a second source of truth to maintain.
-<Button
-  data-track="conduct_search"           // ← replace with your value from Taxonomy
-  onClick={handleSearch}               // ← your existing handler, unchanged
->
-  Search
-</Button>
-```
-
-#### What to know
-
-- **No per-button event code.** No explicit capture call needed per button — Engineering adds HTML attributes only. The global click listener in the app shell fires the event automatically.
-- **Page-level buttons need only `data-track`.** The click listener automatically reads the current route (`window.location.pathname`) as the `track_location`. No `data-track-location` attribute needed.
-- **Modal buttons need `data-track-location` too.** When a button is inside a modal, the URL doesn't change — so the route fallback would just show the underlying page path, not the modal. Add `data-track-location` with the modal's name (from the Taxonomy) so analytics can distinguish modal actions from page actions.
-- **Any element works.** The attributes work on `<button>`, `<a>`, `<div>`, or any clickable element. They are standard HTML `data-*` attributes — React, Vue, Angular, and all CSS solutions pass them through to the DOM unchanged.
-
-#### Acceptance Criteria: Button Clicks Track via `data-track`
-
-| Check | How to Verify |
-| --- | --- |
-| `data-track` attributes in DOM | Inspect tracked buttons → `data-track` attribute present. Page-level buttons should have `data-track` only. Modal buttons should have both `data-track` and `data-track-location`. |
-| `button_clicked` fires in analytics | Click a tracked page-level button → activity feed → `button_clicked` event with `track_id` and `track_location` (current URL path). |
-| Nested clicks resolve correctly | Click an icon inside a tracked button → `track_id` still populated via `closest()` |
-| Route fallback works | Click a page-level button with no `data-track-location` → `track_location` shows the current URL path, not `undefined`. |
-| Modal buttons override fallback | Open a modal → click its tracked button → `track_location` shows the `data-track-location` value, not the underlying page route. |
-
-<a id="event-3"></a>
-
-## Event 3: Modal Lifecycle — Phase 2
-
-Modal lifecycle tracking (`modal_viewed`, `modal_dismissed`, `modal_confirmed`) is deferred to Phase 2. See [Event 3: Modal Lifecycle (Phase 2+)](#event-3-phase-2) for the full Engineering implementation instructions.
-
----
-
-<a id="event-4"></a>
-
-## Event 4: User Registration, Identification & Account Management — Phase 1
+## Event 1: User Registration, Identification & Account Management — Phase 1
 
 **Four events.** `registration_completed` fires once on first account creation (for funnel counting) and links the anonymous session to the new user. `login_completed` fires on every returning login and re-links the session to the known user. `user_logged_out` fires on logout and resets the analytics identity so the next visitor's anonymous events are not attributed to the previous user. `account_deletion` fires when a user's account deletion is successfully initiated.
 
@@ -548,13 +453,73 @@ analyticsClient.capture('account_deletion');
 | Reset fires on logout | Log out → navigate to 2-3 pages → new page views appear under a new anonymous ID, not the previous user |
 | `account_deletion` fires on deletion | Initiate deletion → wait for confirmation → activity feed → `account_deletion` |
 
-<a id="event-5"></a>
+---
 
-## Event 5: Purchases & Subscriptions — Phase 1 / Phase 2
+<a id="event-2"></a>
+
+## Event 2: Product Engagement — Phase 1
+
+> `[Customize]` Replace the search example below with your product's core engagement action(s). The pattern — one event on intent, one on outcome — applies to any action with an async backend step.
+
+**Two events.** `{ENGAGEMENT_STARTED}` fires when a user initiates the core action. `{ENGAGEMENT_COMPLETED}` fires when the action returns successfully. Together they measure adoption and completion rate — a core engagement signal for the product-led growth model.
+
+### Engineering
+
+Pattern, not paste: The code below shows **what to capture and when**. Place these calls inside your existing handlers.
+
+#### When a user initiates the core action
+
+```js
+// PATTERN: Place where the action is dispatched — the moment the user triggers it.
+// Fire BEFORE the API call, not after.
+
+// [Customize] Build a properties object that describes the action without PII.
+// Example: which fields were used, which options were selected.
+const eventProps = {
+  {USAGE_FIELDS}: {USAGE_VALUES},           // ← describe the action, never user-entered values
+};
+
+analyticsClient.capture('{ENGAGEMENT_STARTED}', eventProps);
+```
+
+#### When the action completes successfully
+
+```js
+// PATTERN: Place inside the success callback (.then() or after await).
+// Only fire when the API returns successfully — do not fire on errors or timeouts.
+
+analyticsClient.capture('{ENGAGEMENT_COMPLETED}', {
+  id: response.{ACTION_ID},                 // ← unique ID from the API response
+  {USAGE_FIELDS}: {USAGE_VALUES},           // ← same properties from the started event
+});
+```
+
+#### What to know
+
+- **Two events, not one.** The started event fires on intent; the completed event fires on outcome. The gap between the two measures completion rate and helps identify drop-off from slow or failed actions.
+- **Started fires before the API call.** This captures intent regardless of whether the action succeeds. If the API errors, you'll see a started event without a matching completed event — that's the signal, not a bug.
+- **Completed fires only on success.** Do not fire on API errors, timeouts, or failures.
+- **Completed carries a unique ID.** This links the completed event to the specific result. The started event does not carry an ID because the ID is assigned by the backend after the action executes.
+- **Never capture PII in event properties.** Track which options were used (field names, categories, counts), never the values themselves (emails, phone numbers, names).
+
+#### Acceptance Criteria: Product Engagement
+
+| Check | How to Verify |
+| --- | --- |
+| Started event fires on action initiation | Trigger the action → activity feed → started event with expected properties |
+| Completed event fires on success | Trigger action → wait for results → activity feed → completed event with `id` |
+| Started fires even on failures | Trigger an action that will error → started fires, completed does NOT |
+| No PII in event properties | Inspect both events — no user-entered values anywhere in properties |
+
+---
+
+<a id="event-3"></a>
+
+## Event 3: Purchases & Subscriptions — Phase 1 / Phase 2
 
 > `[Customize]` Adapt the events below to your product's revenue model. The four events below cover a subscription + add-on credits model. Replace or remove events as needed (e.g. one-time purchases, usage-based billing).
 
-> **Phasing note:** Phase 1 events in this section are: `subscription_started`, `subscription_upgraded`, `subscription_cancelled`, `{ADD_ON_PURCHASE_EVENT}`. Phase 2 tracks `subscription_downgraded` — see [Event 5: Subscription Downgraded (Phase 2)](#event-5-phase-2).
+> **Phasing note:** Phase 1 events in this section are: `subscription_started`, `subscription_upgraded`, `subscription_cancelled`, `{ADD_ON_PURCHASE_EVENT}`. Phase 2 tracks `subscription_downgraded` — see [Event 3: Subscription Downgraded (Phase 2)](#event-3-phase-2).
 
 ### Engineering
 
@@ -660,7 +625,7 @@ analyticsClient.setPersonProperties({
 - **Subscriptions and add-on purchases are separate events.** Each revenue event type has its own event name.
 - **`plan_name` is included on subscription events.** Passed on started, upgraded, and cancelled events. On upgrade, pass the **new** plan (post-change), not the old one.
 - **`promo_code` must be lowercased before capturing.** Only include `promo_code` and `discount_amount` when a promo was successfully applied — omit both fields entirely otherwise.
-- **Two calls on every subscription event, not one.** The transaction event (capture) records the event. Set-person-properties (Event 7) persists the user's current plan and related timestamps. Both go in the same success handler.
+- **Two calls on every subscription event, not one.** The transaction event (capture) records the event. Set-person-properties (Event 4) persists the user's current plan and related timestamps. Both go in the same success handler.
 - **Capture only after confirmed API success.** "Clicked Pay" ≠ "payment succeeded"; "clicked Cancel" ≠ "subscription cancelled."
 - **`effective_at` is an ISO 8601 timestamp.** On purchase/upgrade events, it's when the transaction occurred. On cancellation events, it's when the change takes effect.
 - **`line_item` is the pre-tax, pre-discount total.** `amount` is the final charge the customer pays. Both are numbers, not strings.
@@ -676,65 +641,11 @@ analyticsClient.setPersonProperties({
 | `subscription_upgraded` fires | Upgrade → activity feed → `subscription_upgraded` with new `plan_name` |
 | `subscription_cancelled` fires | Cancel → activity feed → `subscription_cancelled` with `plan_name` and `effective_at` (only after API confirms) |
 
-<a id="event-6"></a>
+---
 
-## Event 6: Product Engagement — Phase 1
+<a id="event-4"></a>
 
-> `[Customize]` Replace the search example below with your product's core engagement action(s). The pattern — one event on intent, one on outcome — applies to any action with an async backend step.
-
-**Two events.** `{ENGAGEMENT_STARTED}` fires when a user initiates the core action. `{ENGAGEMENT_COMPLETED}` fires when the action returns successfully. Together they measure adoption and completion rate — a core engagement signal for the product-led growth model.
-
-### Engineering
-
-Pattern, not paste: The code below shows **what to capture and when**. Place these calls inside your existing handlers.
-
-#### When a user initiates the core action
-
-```js
-// PATTERN: Place where the action is dispatched — the moment the user triggers it.
-// Fire BEFORE the API call, not after.
-
-// [Customize] Build a properties object that describes the action without PII.
-// Example: which fields were used, which options were selected.
-const eventProps = {
-  {USAGE_FIELDS}: {USAGE_VALUES},           // ← describe the action, never user-entered values
-};
-
-analyticsClient.capture('{ENGAGEMENT_STARTED}', eventProps);
-```
-
-#### When the action completes successfully
-
-```js
-// PATTERN: Place inside the success callback (.then() or after await).
-// Only fire when the API returns successfully — do not fire on errors or timeouts.
-
-analyticsClient.capture('{ENGAGEMENT_COMPLETED}', {
-  id: response.{ACTION_ID},                 // ← unique ID from the API response
-  {USAGE_FIELDS}: {USAGE_VALUES},           // ← same properties from the started event
-});
-```
-
-#### What to know
-
-- **Two events, not one.** The started event fires on intent; the completed event fires on outcome. The gap between the two measures completion rate and helps identify drop-off from slow or failed actions.
-- **Started fires before the API call.** This captures intent regardless of whether the action succeeds. If the API errors, you'll see a started event without a matching completed event — that's the signal, not a bug.
-- **Completed fires only on success.** Do not fire on API errors, timeouts, or failures.
-- **Completed carries a unique ID.** This links the completed event to the specific result. The started event does not carry an ID because the ID is assigned by the backend after the action executes.
-- **Never capture PII in event properties.** Track which options were used (field names, categories, counts), never the values themselves (emails, phone numbers, names).
-
-#### Acceptance Criteria: Product Engagement
-
-| Check | How to Verify |
-| --- | --- |
-| Started event fires on action initiation | Trigger the action → activity feed → started event with expected properties |
-| Completed event fires on success | Trigger action → wait for results → activity feed → completed event with `id` |
-| Started fires even on failures | Trigger an action that will error → started fires, completed does NOT |
-| No PII in event properties | Inspect both events — no user-entered values anywhere in properties |
-
-<a id="event-7"></a>
-
-## Event 7: User Properties Updated — Phase 1
+## Event 4: User Properties Updated — Phase 1
 
 **Why this exists:** Without person properties, attributes like `plan_name` only live on individual events. A PM cannot ask "show me engagement by users on the Premium plan" because the engagement event doesn't know the user's plan. Setting person properties persists user-level attributes so they're attached to every subsequent event — enabling segmentation by plan tier, subscription state, registration cohort, and more.
 
@@ -753,7 +664,7 @@ analyticsClient.capture('{ENGAGEMENT_COMPLETED}', {
 
 ### Engineering
 
-The set-person-properties calls are already shown inline with their trigger events (Events 4 and 5). This section documents the complete list and the reasoning.
+The set-person-properties calls are already shown inline with their trigger events (Events 1 and 3). This section documents the complete list and the reasoning.
 
 #### What to know
 
@@ -787,41 +698,102 @@ The set-person-properties calls are already shown inline with their trigger even
 
 ---
 
-<a id="phase-1-qa"></a>
+<a id="event-5"></a>
 
-## Phase 1 — QA Verification Checklist
+## Event 5: Page Views (Virtual) — Phase 1
 
-Run through this after Phase 1 implementation, before marking Phase 1 as done.
+**Why virtual?** Single-page apps (SPAs) handle navigation client-side. Route changes don't trigger a full page load, so the SDK's built-in page view fires only once — on initial load. We capture a page view event on every route change to capture all navigation.
 
-#### Live Events
+### Engineering
 
-- Navigate 3+ routes → page view fires each time with correct `page_path`
-- Click 3+ Phase 1 tracked buttons → `button_clicked` fires with correct `track_id` and `track_location`
-- Sign up → `registration_completed` fires with `method`, person is identified, `registration_timestamp` set
-- Log in → only `login_completed` fires (no `registration_completed`), person is re-identified
-- Log out → `user_logged_out` fires, then new anonymous events appear under a fresh distinct ID
-- Initiate account deletion → `account_deletion` fires only after backend confirms
-- Complete subscription payment → `subscription_started` fires with expected properties; person properties set
-- Upgrade subscription → `subscription_upgraded` fires with new `plan_name`; person properties updated
-- Purchase add-on → add-on event fires with expected properties; person properties set
-- Apply promo code → `promo_code` is lowercased, `discount_amount` present; without promo → both absent
-- Cancel subscription → `subscription_cancelled` fires with `plan_name` and `effective_at`; `last_cancellation_timestamp` set
-- Trigger core engagement action → started event fires immediately; completed event fires on success
-- Trigger failing engagement action → started fires, completed does NOT
-- No PII in engagement events → properties contain field names only, never actual values
+Already done in Pre-work 3. The route-change listener in the app shell handles this. No additional code needed per page.
 
-#### Person Profiles
+Engineering must verify: Virtual page views fire on route-change events — meaning they only capture client-side route changes (URL path changes). Confirm that every user action you want tracked as a "page view" actually triggers a route change. Actions that happen within the same page (e.g. tab switches, accordion opens, in-page filtering) do **not** change the URL and will **not** fire a page view. If any key user flows stay on the same route, those interactions need to be tracked via button clicks (Event 6) or modal events (Event 7) instead.
 
-- Person profile shows pre-login events after identify (anonymous → identified merge)
-- After logout, new anonymous events appear under a fresh distinct ID
-- All expected person properties present after full lifecycle flow
-- Write-once properties not overwritten on repeat actions
-- Funnels work: `registration_completed` → `subscription_started` shows conversion
+#### What gets captured
 
-#### No Double-Counting
+```js
+analyticsClient.capture('$pageview', { page_path: '/results' });
+```
 
-- Auto page view capture disabled in SDK init
-- One route change = one page view event (not two)
+#### Acceptance Criteria: Page Views Fire on Every Route
+
+| Check | How to Verify |
+| --- | --- |
+| Page view fires on navigation | Navigate to 3+ pages. In the analytics platform activity feed, you should see one page view event per navigation with a `page_path` matching the URL. |
+| No double-counting | Each navigation produces exactly 1 page view event |
+| Analytics platform receives page views | Events appear in the activity feed within seconds |
+
+---
+
+<a id="event-6"></a>
+
+## Event 6: Button Clicks — Phase 1 / Phase 2+
+
+> **Phase 1 scope:** Implement the `data-track` attribute infrastructure described below in full — it applies to all tracked buttons. In Phase 1, add `data-track` attributes to the **priority-1 buttons only**: {LIST_PHASE_1_TRACK_IDS}. The remaining `track_id` values (priority 2 and unassigned) are deferred to [Phase 2+](#event-6-phase-2).
+
+**Why `data-track`?** Many modern CSS solutions (styled-components, CSS Modules, Tailwind with purging) generate class names that change between builds. CSS-selector-based click triggers would break silently after every deploy. Instead, Engineering adds stable `data-track` attributes to trackable elements.
+
+### Engineering
+
+The global click listener in the app shell (Pre-work 3) automatically detects clicks on `[data-track]` elements and calls `capture('button_clicked', { track_id, track_location })`. No additional event code is needed per button — Engineering adds HTML attributes only.
+
+#### Add `data-track` attributes to every trackable button
+
+Pattern, not paste: The code below shows the **attribute pattern** to apply to your existing components. The `data-track` values are examples — replace them with the values from your [Event Taxonomy](./taxonomy/). The component names are placeholders for your actual components and handlers. You are adding attributes to existing elements, not creating new components.
+
+```jsx
+// PATTERN: Add data-track to each trackable element.
+// Replace the values with those from the Event Taxonomy.
+//
+// Button INSIDE a modal — add data-track-location manually.
+// The URL doesn't change when a modal opens, so the route fallback
+// would just show the underlying page. The explicit attribute tells
+// analytics this click happened inside the modal, not on the page.
+<Button
+  data-track="submit_payment"               // ← replace with your value from Taxonomy
+  data-track-location="confirm_payment_modal" // ← required: modal has no route
+  onClick={handlePayment}                   // ← your existing handler, unchanged
+>
+  Pay now
+</Button>
+
+// Page-level buttons: add data-track only. Do NOT add data-track-location.
+// The click listener automatically captures the current URL path (e.g. /search, /results)
+// as the click's location. Adding data-track-location here would duplicate
+// that and create a second source of truth to maintain.
+<Button
+  data-track="conduct_search"           // ← replace with your value from Taxonomy
+  onClick={handleSearch}               // ← your existing handler, unchanged
+>
+  Search
+</Button>
+```
+
+#### What to know
+
+- **No per-button event code.** No explicit capture call needed per button — Engineering adds HTML attributes only. The global click listener in the app shell fires the event automatically.
+- **Page-level buttons need only `data-track`.** The click listener automatically reads the current route (`window.location.pathname`) as the `track_location`. No `data-track-location` attribute needed.
+- **Modal buttons need `data-track-location` too.** When a button is inside a modal, the URL doesn't change — so the route fallback would just show the underlying page path, not the modal. Add `data-track-location` with the modal's name (from the Taxonomy) so analytics can distinguish modal actions from page actions.
+- **Any element works.** The attributes work on `<button>`, `<a>`, `<div>`, or any clickable element. They are standard HTML `data-*` attributes — React, Vue, Angular, and all CSS solutions pass them through to the DOM unchanged.
+
+#### Acceptance Criteria: Button Clicks Track via `data-track`
+
+| Check | How to Verify |
+| --- | --- |
+| `data-track` attributes in DOM | Inspect tracked buttons → `data-track` attribute present. Page-level buttons should have `data-track` only. Modal buttons should have both `data-track` and `data-track-location`. |
+| `button_clicked` fires in analytics | Click a tracked page-level button → activity feed → `button_clicked` event with `track_id` and `track_location` (current URL path). |
+| Nested clicks resolve correctly | Click an icon inside a tracked button → `track_id` still populated via `closest()` |
+| Route fallback works | Click a page-level button with no `data-track-location` → `track_location` shows the current URL path, not `undefined`. |
+| Modal buttons override fallback | Open a modal → click its tracked button → `track_location` shows the `data-track-location` value, not the underlying page route. |
+
+---
+
+<a id="event-7"></a>
+
+## Event 7: Modal Lifecycle — Phase 2
+
+Modal lifecycle tracking (`modal_viewed`, `modal_dismissed`, `modal_confirmed`) is deferred to Phase 2. See [Event 7: Modal Lifecycle (Phase 2+)](#event-7-phase-2) for the full Engineering implementation instructions.
 
 ---
 
@@ -829,9 +801,41 @@ Run through this after Phase 1 implementation, before marking Phase 1 as done.
 
 Events and properties with priority 2 are implemented in Phase 2. Events and properties with no assigned priority (`null`) should be reviewed for inclusion in Phase 2 or deferral to Phase 3.
 
-<a id="event-2-phase-2"></a>
+<a id="event-3-phase-2"></a>
 
-## Event 2: Button Clicks — Phase 2+ (`track_id` values)
+## Event 3: Subscription Downgraded — Phase 2
+
+### Engineering
+
+#### When a subscriber downgrades to a lower plan
+
+```js
+// PATTERN: Place inside the handler that runs after the backend confirms the plan downgrade.
+
+analyticsClient.capture('subscription_downgraded', {
+  plan_name: '{NEW_PLAN_SLUG}',             // ← the NEW plan after downgrade
+  effective_at: '{ISO_8601}',               // ← when the downgrade takes effect
+});
+
+// Set person properties — update plan_name and subscription timestamp
+analyticsClient.setPersonProperties({
+  plan_name: '{NEW_PLAN_SLUG}',
+  last_subscription_start_timestamp: '{ISO_8601}',
+});
+```
+
+#### Acceptance Criteria: Subscription Downgraded
+
+| Check | How to Verify |
+| --- | --- |
+| `subscription_downgraded` fires | Downgrade → activity feed → `subscription_downgraded` with new `plan_name` and `effective_at` |
+| Person properties update | Persons → `plan_name` and `last_subscription_start_timestamp` updated |
+
+---
+
+<a id="event-6-phase-2"></a>
+
+## Event 6: Button Clicks — Phase 2+ (`track_id` values)
 
 The `data-track` infrastructure (global click listener in the app shell) is already in place from Phase 1. Phase 2+ adds `data-track` attributes to the remaining tracked buttons.
 
@@ -839,13 +843,15 @@ The `data-track` infrastructure (global click listener in the app shell) is alre
 
 **Remaining buttons (unassigned priority — review for Phase 2 or Phase 3):** All other `track_id` values in the [Event Taxonomy](./taxonomy/) not listed above or in Phase 1.
 
-Engineering adds `data-track` (and `data-track-location` for modal buttons) to each element following the same patterns described in [Event 2 (Phase 1)](#event-2). No new code is needed — the existing global click listener fires `button_clicked` automatically for any element with a `data-track` attribute.
+Engineering adds `data-track` (and `data-track-location` for modal buttons) to each element following the same patterns described in [Event 6 (Phase 1)](#event-6). No new code is needed — the existing global click listener fires `button_clicked` automatically for any element with a `data-track` attribute.
 
-<a id="event-3-phase-2"></a>
+---
 
-## Event 3: Modal Lifecycle — Phase 2
+<a id="event-7-phase-2"></a>
 
-**Three events.** `modal_viewed` fires when a modal opens. `modal_dismissed` fires when it closes without completing the action. `modal_confirmed` fires when the action inside the modal **succeeds** — use it when "clicked" ≠ "succeeded" (e.g. a payment API call the server can reject). For modals where clicking the button always completes the action, `button_clicked` (Event 2) alone is sufficient and `modal_confirmed` is not needed.
+## Event 7: Modal Lifecycle — Phase 2
+
+**Three events.** `modal_viewed` fires when a modal opens. `modal_dismissed` fires when it closes without completing the action. `modal_confirmed` fires when the action inside the modal **succeeds** — use it when "clicked" ≠ "succeeded" (e.g. a payment API call the server can reject). For modals where clicking the button always completes the action, `button_clicked` (Event 6) alone is sufficient and `modal_confirmed` is not needed.
 
 ### Engineering
 
@@ -884,7 +890,7 @@ useEffect(() => {
     setIsOpen(false);
   }}
 >
-  {/* Confirm button uses data-track (Event 2) for the click itself */}
+  {/* Confirm button uses data-track (Event 6) for the click itself */}
   <Button
     data-track="{CONFIRM_TRACK_ID}"
     data-track-location="{MODAL_NAME}"
@@ -906,7 +912,7 @@ useEffect(() => {
 #### What to know
 
 - **One `modal_name` per modal, used in all events.** The value in `modal_viewed`, `modal_dismissed`, and `modal_confirmed` must match so analytics can pair opens with outcomes.
-- **The confirm button click is tracked by Event 2.** Its `data-track` attribute fires `button_clicked` automatically. `modal_confirmed` is a separate event that fires on **success**, not on click.
+- **The confirm button click is tracked by Event 6.** Its `data-track` attribute fires `button_clicked` automatically. `modal_confirmed` is a separate event that fires on **success**, not on click.
 - **`modal_confirmed` is conditional.** Only add it to modals where the confirm action can fail (API calls, payment processing). For modals where the click always completes the action, `button_clicked` alone is sufficient.
 - **Dismissal = any close that isn't the confirm action.** Backdrop click, Escape key, X button — if your modal component funnels all of these through one callback, the single capture covers them all.
 
@@ -919,36 +925,6 @@ useEffect(() => {
 | `modal_confirmed` fires on success | Open modal with async action → click confirm → action succeeds → `modal_confirmed` |
 | No `modal_confirmed` on failure | Click confirm → action fails → no `modal_confirmed` |
 | No `modal_dismissed` on confirm | Click confirm → only `button_clicked` (+ `modal_confirmed` on success), no `modal_dismissed` |
-
-<a id="event-5-phase-2"></a>
-
-## Event 5: Subscription Downgraded — Phase 2
-
-### Engineering
-
-#### When a subscriber downgrades to a lower plan
-
-```js
-// PATTERN: Place inside the handler that runs after the backend confirms the plan downgrade.
-
-analyticsClient.capture('subscription_downgraded', {
-  plan_name: '{NEW_PLAN_SLUG}',             // ← the NEW plan after downgrade
-  effective_at: '{ISO_8601}',               // ← when the downgrade takes effect
-});
-
-// Set person properties — update plan_name and subscription timestamp
-analyticsClient.setPersonProperties({
-  plan_name: '{NEW_PLAN_SLUG}',
-  last_subscription_start_timestamp: '{ISO_8601}',
-});
-```
-
-#### Acceptance Criteria: Subscription Downgraded
-
-| Check | How to Verify |
-| --- | --- |
-| `subscription_downgraded` fires | Downgrade → activity feed → `subscription_downgraded` with new `plan_name` and `effective_at` |
-| Person properties update | Persons → `plan_name` and `last_subscription_start_timestamp` updated |
 
 ---
 
