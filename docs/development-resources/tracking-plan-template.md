@@ -68,7 +68,7 @@ Key events in the taxonomy exist to measure a transition in the product lifecycl
 | Transition | Key Events | Contact Status | Metrics Measured |
 | --- | --- | --- | --- |
 | **Visitor → Signed Up** | `user_registered` | Anonymous → Registered | Signup conversion rate, time-to-signup |
-| **Signed Up → Activated** | `feature_first_used` | Registered → Active | Activation rate, time-to-value |
+| **Signed Up → Activated** | `feature_used` | Registered → Active | Activation rate, time-to-value |
 | **Activated → Subscribed** | `subscription_started` | Active → Paying | Trial-to-paid rate, revenue per user |
 | **{STAGE_X} → {STAGE_Y}** | `{event_name}` | {status_before} → {status_after} | {metric_1}, {metric_2} |
 | **{STAGE_Y} → {STAGE_Z}** | `{event_name}` | {status_before} → {status_after} | {metric_1}, {metric_2} |
