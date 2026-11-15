@@ -40,7 +40,7 @@ Phase 1 — Reference
 
 Phase 2+ — Event Implementation
 
-- [Event 3: Purchases & Subscriptions (Phase 2+)](#event-3-phase-2)
+- [Event 3: Subscription Downgraded (Phase 2)](#event-3-phase-2)
 - [Event 6: Button Clicks (Phase 2+ track_ids)](#event-6-phase-2)
 - [Event 7: Modal Lifecycle](#event-7-phase-2)
 
