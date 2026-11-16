@@ -156,6 +156,20 @@ The agent produces a structured record per discovered event. This is the raw mat
 }
 ```
 
+#### Inventory Diffing
+
+A user must be able to diff two event inventories against each other — for example, inventories captured from two different application releases — and see a structured summary of what changed.
+
+Each inventory is a point-in-time snapshot. When the agent runs against the same application at different times (or different versions), the resulting inventories must be comparable. The diff must surface:
+
+- **Added events** — events present in the newer inventory but absent from the older one (new features, new pages, new tracking).
+- **Removed events** — events present in the older inventory but absent from the newer one (removed features, dead code cleanup, deprecated flows).
+- **Modified events** — events present in both inventories but with differences in any field: changed API endpoints, altered request/response shapes, new or removed properties, different DOM behavior, updated user role coverage, or reclassified lifecycle stages.
+
+To support reliable matching across inventories, each discovered event must carry a stable identity. Two records represent the "same" event when they share the same trigger interaction at the same URL path — the combination of `trigger` (the user action) and `url_before` (where it occurs) forms the natural key. The `name_suggestion` field is not stable across runs (the LLM may phrase it differently) and must not be used as the matching key.
+
+The diff output is a consumer-facing deliverable, not an internal diagnostic. It answers: "What changed in our application's trackable behavior between version A and version B?"
+
 ### Stage 2: Taxonomy Generation
 
 *To be defined.*
