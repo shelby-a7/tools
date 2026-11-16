@@ -15,6 +15,7 @@ pre-commit install
 
 ```
 tools/
+├── tracking-plan-agent/    # PRD and specs for the Tracking Plan Agent
 ├── tracking-plan-template/ # Product analytics tracking plan template
 ├── docs/
 │   ├── adr/                    # Architecture Decision Records
@@ -29,6 +30,7 @@ tools/
 ## Development Resources
 
 - **[AI Development Reference](docs/development-resources/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
+- **[Tracking Plan Agent](tracking-plan-agent/)** — PRD and specifications for an agentic process that automates analytics event discovery, taxonomy generation, and tracking plan creation.
 - **[Tracking Plan Template](tracking-plan-template/)** — Tool-agnostic template for product analytics implementation plans. Covers SDK setup, event taxonomy, phased rollout, QA checklists, and architecture reference.
 
 ## Architecture Decisions
