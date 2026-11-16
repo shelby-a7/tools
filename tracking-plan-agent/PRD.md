@@ -20,7 +20,9 @@ Event discovery — the inventorying stage — can follow two distinct routes:
 - **Dynamic content** — CMS-driven pages, A/B test variants, and feature-flagged experiences only manifest at runtime. Static analysis of the codebase cannot surface them.
 - **Third-party behavior** — Analytics SDKs, chat widgets, ad pixels, and tag managers inject behavior at runtime that does not appear in the application's own codebase.
 
-The two routes are best used in combination: interactive exploration surfaces what the running application actually does, while codebase review provides exhaustive coverage of what the code declares. Each method has distinct accuracy strengths.
+### The Two Routes Are Best Used in Combination
+
+Interactive exploration surfaces what the running application actually does, while codebase review provides exhaustive coverage of what the code declares. Separate documentation for the codebase review route will be created at a later time. Each method has distinct accuracy strengths.
 
 **Interactive exploration is more accurate for:**
 
@@ -44,25 +46,6 @@ Codebase review is faster: no running application, no test credentials, and no s
 
 Interactive exploration is more expensive: more LLM tokens per discovery (DOM snapshots, network logs, screenshots), browser infrastructure costs, and more LLM calls — each interaction requires both a decision and an interpretation.
 
-Separate documentation for the codebase review route will be created at a later time.
-
-### The Core Problem
-
-The event discovery agent must do three things simultaneously:
-
-1. **Explore** — Systematically navigate every reachable state of a web application.
-2. **Observe** — Capture what happens at each interaction: network calls, DOM mutations, URL changes, and state transitions.
-3. **Interpret** — Understand the semantic meaning of each interaction in business terms ("user initiated a search," not "POST to /api/search").
-
-### Architecture Overview
-
-The agent requires two architectural layers:
-
-1. **Browser automation layer** — Drives the browser and captures raw signals. Handles navigation, element interaction, network traffic interception, JavaScript evaluation, and DOM observation.
-2. **LLM reasoning layer** — Decides what to do next and interprets what happened. Receives structured observations from the browser layer (accessibility tree snapshots, network logs, console output) and produces exploration decisions and semantic event classifications.
-
-The browser automation layer produces raw data; the LLM reasoning layer gives that data meaning. Neither layer works alone — the browser layer without reasoning is an aimless crawler, and the reasoning layer without browser automation has nothing to observe.
-
 ## 2. Product Type
 
 *To be defined.*
@@ -80,6 +63,31 @@ The browser automation layer produces raw data; the LLM reasoning layer gives th
 *To be defined.*
 
 ## 6. Functional Requirements
+
+### Stage 1: Event Discovery
+
+#### The Core Problem
+
+The event discovery agent must do three things simultaneously:
+
+1. **Explore** — Systematically navigate every reachable state of a web application.
+2. **Observe** — Capture what happens at each interaction: network calls, DOM mutations, URL changes, and state transitions.
+3. **Interpret** — Understand the semantic meaning of each interaction in business terms ("user initiated a search," not "POST to /api/search").
+
+#### Architecture Overview
+
+The agent requires two architectural layers:
+
+1. **LLM reasoning layer** — Decides what to do next and interprets what happened. Receives structured observations from the browser layer (accessibility tree snapshots, network logs, console output) and produces exploration decisions and semantic event classifications.
+2. **Browser automation layer** — Drives the browser and captures raw signals. Handles navigation, element interaction, network traffic interception, JavaScript evaluation, and DOM observation.
+
+The LLM reasoning layer drives the process; the browser automation layer executes its decisions and returns observations. Neither layer works alone — the reasoning layer without browser automation has nothing to observe, and the browser layer without reasoning is an aimless crawler.
+
+### Stage 2: Taxonomy Generation
+
+*To be defined.*
+
+### Stage 3: Tracking Plan Creation
 
 *To be defined.*
 
