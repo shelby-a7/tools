@@ -48,7 +48,18 @@ Interactive exploration is more expensive: more LLM tokens per discovery (DOM sn
 
 ## 2. Product Type
 
-*To be defined.*
+Internal tool — agentic workflow.
+
+The Tracking Plan Agent is a task-specific autonomous workflow that takes a web application as input and produces a completed tracking plan as output. It is not a consumer-facing product.
+
+| Attribute | Value |
+|---|---|
+| **Type** | Internal tool (agentic workflow) |
+| **Users** | Product managers, analytics engineers, marketing operations |
+| **Input** | Web application URL, authentication credentials per user role, optional codebase access |
+| **Output** | Completed tracking plan from the [Tracking Plan Template](../tracking-plan-template/tracking-plan-template.md) — event inventory, event taxonomy, and implementation instructions |
+| **Usage pattern** | Run per application version or tracking plan revision. Produces a deliverable; does not run continuously. |
+| **Delivery** | The agent runs as a process and writes output files. No UI, no API, no ongoing service. |
 
 ## 3. Goals and Objectives
 
@@ -98,6 +109,99 @@ The browser automation tooling must provide the following capabilities:
 
 The Playwright Example column shows one implementation of each requirement. These APIs are Playwright-specific; other browser automation tools provide equivalent capabilities through different interfaces. See the [Browser Automation Options Evaluation](./browser-automation-options.md) for a comparison across tools.
 
+#### Browser Automation Layer Output
+
+The browser layer produces a **raw interaction record** for each action the agent performs. This record contains all observed signals in their original form, before LLM interpretation. It is the observation the reasoning layer receives after every browser action.
+
+**Signals captured per interaction:**
+
+| Signal | Contents |
+|---|---|
+| **Interaction performed** | Action type (click, fill, select, navigate), target element (accessibility role + label), value entered (if any) |
+| **Network calls** | All HTTP requests fired during the interaction, in sequence. Per call: method, URL, request headers, request body, response status, response headers, response body, content type |
+| **Accessibility tree** | Structured snapshot of the page state after the interaction: roles, labels, hierarchy, interactable elements |
+| **URL change** | URL before and after |
+| **DOM mutations** | What appeared, disappeared, or changed |
+| **Storage changes** | Diffs to localStorage, sessionStorage, and cookies |
+| **Console output** | All console messages emitted during the interaction, including detected analytics SDK calls |
+| **Form field inventory** | When a form is present: field names, input types, labels, required/optional status |
+| **Metadata** | Timestamp, user role being explored, interaction sequence number, page title |
+
+**Multiple network calls per interaction.** A single user action frequently fires multiple API requests — a form submission may hit an auth endpoint, then a profile endpoint, then trigger a redirect that loads new data. The record captures all requests in sequence, not just the primary one.
+
+**Existing analytics detection.** Console output is monitored for calls to known analytics SDKs (PostHog, Segment, Mixpanel, Google Analytics, Amplitude, and others). When the application already tracks an event, the record captures the SDK name, method called, event name, and properties. This passes through to the Event Discovery Output so downstream stages can align with or build on existing tracking.
+
+**Form field inventory.** Captured whenever the accessibility tree contains form elements. For the highest-priority event types — registration (Event 1), product engagement (Event 2), and purchases (Event 3) — form fields reveal what data the user submits: registration fields (email, password, name), search parameters, payment details (plan selector, promo code field), and subscription options.
+
+**Raw records are retained with the inventory.** Each inventory preserves its raw interaction records. When an inventory diff reports a modified or removed event, the raw records for both versions provide signal-level evidence of what changed.
+
+#### LLM Reasoning Layer Requirements
+
+The reasoning layer receives observations from the browser layer, interprets them, and directs the next action. It requires three categories of input.
+
+**1. Initialization context** — provided once at the start of exploration:
+
+- **Event type framework** — The event types from the [Tracking Plan Template](../tracking-plan-template/tracking-plan-template.md), in priority order. The first three are highest priority — for many applications, these are the first events a company needs to track:
+  1. User Registration, Identification & Account Management (sign-up)
+  2. Product Engagement (usage)
+  3. Purchases & Subscriptions (upsell/revenue)
+  4. User Properties Updated (segmentation)
+  5. Page Views (navigation)
+  6. Button Clicks (interaction)
+  7. Modal Lifecycle (UI state)
+
+  The agent allocates more exploration depth to flows that produce higher-priority event types. A sign-up flow or payment flow warrants deeper interaction than a static content page.
+
+- **Route map** (when available) — Extracted from the codebase's router configuration. Gives the agent a map before it starts exploring.
+
+- **User roles and credentials** — The roles to explore and the authentication credentials for each.
+
+- **Naming and property conventions** — From the tracking plan template: snake_case event names, no PII in properties, describe actions not values.
+
+**2. Per-interaction observations** — received from the browser layer after every action:
+
+The raw interaction record defined in [Browser Automation Layer Output](#browser-automation-layer-output). The reasoning layer interprets all signal types together — a network call alone is ambiguous; combined with the DOM change, the element clicked, and the URL transition, it becomes a classifiable event.
+
+**3. Exploration state** — maintained by the reasoning layer across interactions:
+
+| State | Purpose |
+|---|---|
+| **Visited-states set** | URL + key DOM state combinations already explored — prevents redundant visits |
+| **Discovered events** | Running inventory — avoids duplicate discoveries, identifies event pairing |
+| **Coverage gaps** | Routes, roles, or interaction types not yet explored — drives exploration decisions |
+| **Current position** | Where the agent is (URL, page state, authenticated role) |
+
+**Decisions the reasoning layer makes per interaction:**
+
+1. **Classify** — Is this interaction an event? Which event type? Or is it noise (e.g. hovering over a tooltip)?
+2. **Extract** — What properties does this event carry? What person properties are in the API response? Does an existing analytics call already track it?
+3. **Pair** — Is this a started event that expects a completed event? (Indicated by an async API call in progress.)
+4. **Route** — What to do next: interact with the next element, navigate to the next page, authenticate as the next role, or end exploration.
+
+#### Agent Loop
+
+The two layers communicate through a repeating cycle of four steps:
+
+**1. Command.** The reasoning layer issues an instruction to the browser layer:
+   - **Navigate** to a URL
+   - **Interact** with an element (click, fill, select) identified by accessibility role and label
+   - **Authenticate** as a specific user role
+   - **Wait** for network idle or a specific element to appear
+
+**2. Execute and observe.** The browser layer executes the command and captures all signals that occur during and after execution. It returns the raw interaction record.
+
+**3. Interpret.** The reasoning layer receives the record and classifies the interaction: event type, properties, person properties, existing tracking, or not an event.
+
+**4. Decide.** Based on the updated exploration state, the reasoning layer selects the next command:
+   - Interactable elements remain on the current page → interact with the next one
+   - Current page is fully explored → navigate to the next unvisited route
+   - Current role's exploration is complete → authenticate as the next role
+   - All roles explored → end exploration and assemble the final inventory
+
+The loop repeats from step 1 until the reasoning layer determines exploration is complete.
+
+**Context management.** The exploration state grows with each iteration. To stay within context window limits, the reasoning layer summarizes older raw observations while retaining the full structured inventory and coverage state. Recent interactions are kept in full for classification accuracy; older interactions are compressed to their event record or discarded if they produced no event.
+
 #### Exploration Approach
 
 A dynamic web app has a state graph, not a page tree. The agent must follow this approach:
@@ -131,30 +235,78 @@ A dynamic web app has a state graph, not a page tree. The agent must follow this
 
 #### Event Discovery Output
 
-The agent produces a structured record per discovered event. This is the raw material that Stage 2 (Taxonomy Generation) and Stage 3 (Tracking Plan Creation) consume.
+The agent produces a structured record per discovered event. This is the deliverable that Stage 2 (Taxonomy Generation) and Stage 3 (Tracking Plan Creation) consume.
+
+The example below shows a registration event (Event 1, highest priority) to illustrate the full field set:
 
 ```json
 {
   "discovered_events": [
     {
-      "name_suggestion": "search_initiated",
-      "category": "product_engagement",
-      "trigger": "User clicks Search button on /dashboard",
-      "ui_element": "button[role='button'] 'Search'",
-      "api_call": "POST /api/search",
-      "request_shape": { "query": "string", "filters": "object" },
-      "response_shape": { "results": "array", "count": "number" },
-      "url_before": "/dashboard",
-      "url_after": "/dashboard (no change)",
-      "dom_changes": "Results list appears below search form",
-      "storage_changes": "sessionStorage: last_search_query updated",
-      "user_roles_observed": ["registered", "subscriber"],
-      "properties_to_track": ["query_length", "filter_count", "result_count"],
-      "lifecycle_stage": "activation"
+      "name_suggestion": "registration_completed",
+      "category": "user_registration",
+      "trigger": "User submits registration form on /signup",
+      "ui_element": "button[role='button'] 'Create Account'",
+      "url_before": "/signup",
+      "url_after": "/dashboard",
+      "api_calls": [
+        {
+          "method": "POST",
+          "url": "/api/auth/register",
+          "request_shape": { "email": "string", "password": "string" },
+          "response_shape": { "user_id": "string", "token": "string", "created_at": "string" }
+        },
+        {
+          "method": "GET",
+          "url": "/api/user/profile",
+          "request_shape": {},
+          "response_shape": { "user_id": "string", "plan_name": "string", "registration_timestamp": "string" }
+        }
+      ],
+      "form_fields": [
+        { "name": "email", "type": "email", "required": true },
+        { "name": "password", "type": "password", "required": true },
+        { "name": "name", "type": "text", "required": false }
+      ],
+      "auth_state_change": "anonymous → identified",
+      "dom_changes": "Redirect to dashboard; navigation shows user menu",
+      "storage_changes": "cookie: auth_token set; localStorage: user_id set",
+      "console_output": ["posthog.identify('usr_abc123')", "posthog.capture('registration_completed', { method: 'email' })"],
+      "existing_tracking": [
+        { "sdk": "posthog", "call": "identify", "args": ["usr_abc123"] },
+        { "sdk": "posthog", "call": "capture", "args": ["registration_completed", { "method": "email" }] }
+      ],
+      "user_roles_observed": ["anonymous"],
+      "properties_to_track": ["registration_method"],
+      "person_properties_observed": ["plan_name", "registration_timestamp"],
+      "event_pairing": null,
+      "lifecycle_stage": "acquisition",
+      "raw_capture_refs": ["interaction_042", "interaction_043"]
     }
   ]
 }
 ```
+
+**Fields evolved from the initial schema:**
+
+| Field | Type | Purpose |
+|---|---|---|
+| `api_calls` | array | Replaces `api_call` + `request_shape` + `response_shape`. Each entry is one HTTP request with its own shapes. Interactions frequently fire multiple API calls. |
+| `form_fields` | array or null | Fields present in the form the user submitted. Null for non-form interactions. |
+| `auth_state_change` | string or null | Identity transition that occurred (e.g. "anonymous → identified"). Null when no auth change. |
+| `console_output` | array | Console messages emitted during the interaction. |
+| `existing_tracking` | array | Analytics SDK calls detected in console output — the SDK, method, event name, and properties the application already tracks. Empty when none detected. |
+| `person_properties_observed` | array | Fields in API responses that represent user-level attributes (plan_name, registration_timestamp, subscription dates). These feed Event 4 (User Properties Updated) in the tracking plan. |
+| `event_pairing` | string or null | Links started/completed event pairs — e.g. `"completes: search_initiated"`. Null for unpaired events. |
+| `raw_capture_refs` | array | References to the raw interaction records that produced this event. Used for audit and diff evidence. |
+
+**High-priority event signals.** The fields above are designed to capture the information the three highest-priority event types require:
+
+- **Event 1 (Registration/Identity):** `form_fields` reveals what the sign-up form asks for. `auth_state_change` captures the anonymous-to-identified transition. `api_calls` captures the registration endpoint and its response (user ID format, token). `person_properties_observed` captures user-level attributes available in the response. `existing_tracking` shows whether the app already calls `identify()` and `capture('registration_completed')`.
+
+- **Event 2 (Product Engagement):** `api_calls` captures the action's request shape (what the user did) and response shape (what came back). `event_pairing` links started and completed events — the started event fires before the API call, the completed event fires on success. `form_fields` captures search forms, creation forms, or other action inputs.
+
+- **Event 3 (Purchases/Subscriptions):** `api_calls` captures the payment endpoint with pricing fields (amount, currency, plan_name, promo_code). `form_fields` captures the payment form (plan selector, promo code input). `person_properties_observed` captures subscription-related user properties (plan_name, subscription timestamps).
 
 #### Inventory Diffing
 
