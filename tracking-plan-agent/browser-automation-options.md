@@ -8,7 +8,7 @@ Reference comparison of browser automation tools for the [Tracking Plan Agent](P
 |---|---|---|---|---|
 | **Playwright** | Microsoft | Apache-2.0 | Node.js, Python, .NET, Java | Browser automation library with full CDP and native API access |
 | **Browser Use** | Browser Use | MIT | Python | LLM-driven browser agent built on CDP and Pydantic AI |
-| **Stagehand** | Browserbase | MIT | TypeScript | AI-native browser framework with `act`/`observe`/`extract` APIs, built on Playwright |
+| **Stagehand** | Browserbase | MIT | TypeScript | AI-native browser framework with `act`/`observe`/`extract` APIs, Playwright-style interface over CDP |
 | **Anthropic Computer Use** | Anthropic | — | API (any language) | Screenshot-based computer interaction via Claude's vision |
 | **Firecrawl** | Firecrawl (Mendable) | AGPL-3.0 | API + SDKs (Node.js, Python, Go, Rust) | Web crawling and scraping platform with limited interaction |
 | **Hyperbrowser** | Hyperbrowser | Proprietary | API + SDKs (Node.js, Python) | Cloud browser platform with agent integration layer |
@@ -29,17 +29,17 @@ Each cell indicates whether the tool provides the capability as a first-class AP
 
 ### Capability Notes
 
-**Playwright** meets all six requirements natively. Every capability has a documented, first-class API. It is the foundation layer — the other tools either build on it or on the Chrome DevTools Protocol (CDP) it also uses.
+**[Playwright](https://playwright.dev/docs/api/class-page)** meets all six requirements natively. Every capability has a documented, first-class API: [network events](https://playwright.dev/docs/api/class-page#page-event-request) (`page.on('request')`, `page.on('response')`), [script injection](https://playwright.dev/docs/api/class-page#page-add-init-script) (`page.addInitScript()`, `page.evaluate()`), [accessibility snapshots](https://playwright.dev/docs/aria-snapshots), [console capture](https://playwright.dev/docs/api/class-page#page-event-console), [locator-based interaction](https://playwright.dev/docs/api/class-locator), and [frame handling](https://playwright.dev/docs/api/class-framelocator). It is the foundation layer — the other tools either build on it or on the Chrome DevTools Protocol (CDP) it also uses.
 
-**Browser Use** operates through CDP and provides its own interaction and accessibility tree abstractions. Network observation, JavaScript evaluation, and console capture are available through the underlying CDP connection but require the developer to hook into Browser Use's internal browser context rather than calling a dedicated API. Multi-page handling is limited to basic tab management.
+**[Browser Use](https://docs.browser-use.com/open-source/introduction)** operates through CDP and provides its own interaction and [accessibility tree abstractions](https://docs.browser-use.com/open-source/agent). Network observation, JavaScript evaluation, and console capture are available through the [underlying CDP connection](https://docs.browser-use.com/open-source/browsers) but require the developer to hook into Browser Use's internal browser context rather than calling a dedicated API. Multi-page handling is limited to basic tab management.
 
-**Stagehand** is built on Playwright and exposes the underlying `page` and `locator` objects. All six capabilities are accessible: Stagehand's own `act`/`observe`/`extract` APIs handle interaction and accessibility interpretation, while the full Playwright API is available for network observation, JavaScript evaluation, console capture, and frame handling. Because Stagehand requires Browserbase for cloud execution, the developer gets Playwright's capabilities through that hosted environment.
+**[Stagehand](https://docs.stagehand.dev/)** provides Playwright-style `page` and `locator` APIs and drives the browser over CDP directly (v4 has [no Playwright or Puppeteer dependency](https://docs.stagehand.dev/v4/reference/page)). All six capabilities are accessible: Stagehand's own [`act`/`observe`/`extract`](https://docs.stagehand.dev/v4/basics/act) APIs handle interaction and accessibility interpretation, while the [page API](https://docs.stagehand.dev/v4/reference/page) provides network observation, JavaScript evaluation, console capture, and frame handling. Stagehand uses [Browserbase](https://docs.stagehand.dev/v4/configuration/browser) for cloud execution.
 
-**Anthropic Computer Use** operates at the screenshot and coordinate level. It can click, type, scroll, and take screenshots, but it has no access to the DOM, network layer, JavaScript runtime, accessibility tree, or console. This makes it effective for visual exploration but unsuitable for the signal capture that event discovery requires (network traffic, DOM mutations, storage changes).
+**[Anthropic Computer Use](https://platform.claude.com/docs/en/agents-and-tools/computer-use)** operates at the screenshot and coordinate level. It can click, type, scroll, and take screenshots, but it has no access to the DOM, network layer, JavaScript runtime, accessibility tree, or console. The [documentation recommends the browser use tool](https://platform.claude.com/docs/en/agents-and-tools/computer-use) for tasks that stay within web pages. This makes it effective for visual exploration but unsuitable for the signal capture that event discovery requires (network traffic, DOM mutations, storage changes).
 
-**Firecrawl** is designed for crawling and content extraction, not interactive exploration. Its "Interact" mode allows basic actions (click, fill, select) through natural language prompts, but it provides no network interception, no JavaScript injection, no accessibility tree access, and no multi-page session handling. It cannot maintain authenticated sessions across page navigations in the way the event discovery agent requires.
+**[Firecrawl](https://docs.firecrawl.dev/)** is designed for crawling and content extraction, not interactive exploration. Its ["Interact" mode](https://docs.firecrawl.dev/features/interact) allows basic actions (click, fill, select) through natural language prompts or code, but it provides no network interception, no JavaScript injection, no accessibility tree access, and no multi-page session handling. Sessions have a [default 10-minute TTL and 5-minute inactivity timeout](https://docs.firecrawl.dev/features/interact). It cannot maintain authenticated sessions across page navigations in the way the event discovery agent requires.
 
-**Hyperbrowser** provides a cloud browser that can be driven via Puppeteer or Playwright SDKs, plus its own agent integration layer. The underlying Playwright/Puppeteer capabilities (network observation, JavaScript evaluation, accessibility tree, console capture, frame handling) are theoretically accessible, but Hyperbrowser's documentation does not expose them as first-class APIs through its agent layer. The developer would need to work through the raw Playwright/Puppeteer session, reducing Hyperbrowser's value-add to its cloud infrastructure.
+**[Hyperbrowser](https://hyperbrowser.ai/docs)** provides a cloud browser that can be driven via [Playwright](https://hyperbrowser.ai/docs/sessions/playwright), [Puppeteer](https://hyperbrowser.ai/docs/sessions/puppeteer), or Selenium, plus its own [HyperAgent](https://hyperbrowser.ai/docs/agents/overview) integration layer (an open-source Playwright-powered framework). The underlying Playwright/Puppeteer capabilities (network observation, JavaScript evaluation, accessibility tree, console capture, frame handling) are accessible through raw sessions, but Hyperbrowser's agent layer does not expose them as first-class APIs. The developer would need to work through the raw Playwright/Puppeteer session, reducing Hyperbrowser's value-add to its cloud infrastructure.
 
 ## Custom Agent Loop Compatibility
 
@@ -56,17 +56,17 @@ The event discovery agent uses a custom agent loop (Option A in the PRD) where a
 
 ### Compatibility Notes
 
-**Playwright** is LLM-agnostic. It is a browser automation library with no LLM coupling — the developer writes the agent loop and can use any LLM for the reasoning layer. This is the maximum-flexibility option.
+**[Playwright](https://playwright.dev/)** is LLM-agnostic. It is a browser automation library with no LLM coupling — the developer writes the agent loop and can use any LLM for the reasoning layer. This is the maximum-flexibility option.
 
-**Browser Use** has built-in LLM abstractions supporting `ChatAnthropic` (Claude), `ChatOpenAI` (GPT models), `ChatGoogleGenerativeAI` (Gemini), and any OpenAI-compatible endpoint. Claude, GPT, and Codex models (via OpenAI's API) all work. Custom actions can be defined with the `@controller.action` decorator.
+**[Browser Use](https://docs.browser-use.com/open-source/models)** has built-in LLM abstractions supporting `ChatAnthropic` (Claude), `ChatOpenAI` (GPT models), `ChatGoogleGenerativeAI` (Gemini), and any OpenAI-compatible endpoint. Claude, GPT, and Codex models (via OpenAI's API) all work. Custom actions can be defined with the [`@controller.action` decorator](https://docs.browser-use.com/open-source/tools).
 
-**Stagehand** accepts Anthropic and OpenAI API keys directly for its `act`/`observe`/`extract` methods. Codex models would need to be accessed through OpenAI's API (indirect, since Stagehand's LLM abstraction targets chat-optimized models). A fully custom agent loop is possible by using Stagehand's Playwright `page` object directly and calling any LLM separately.
+**[Stagehand](https://docs.stagehand.dev/v4/configuration/models)** supports any LLM provider by name or via a custom client-side LLM callback, including [Claude and OpenAI integrations](https://docs.stagehand.dev/v4/configuration/models). Codex models would need to be accessed through OpenAI's API (indirect, since Stagehand's LLM abstraction targets chat-optimized models). A fully custom agent loop is possible by using Stagehand's `page` object directly and calling any LLM separately.
 
-**Anthropic Computer Use** is a Claude-specific tool type (`computer_20251124` / `computer_toolset_20260801`). It is defined in the Anthropic API and only works with Claude models. There is no equivalent for GPT or Codex.
+**[Anthropic Computer Use](https://platform.claude.com/docs/en/agents-and-tools/computer-use)** is a Claude-specific tool type (`computer_20251124` / `computer_toolset_20260801`). It is defined in the Anthropic API and only works with Claude models. There is no equivalent for GPT or Codex.
 
-**Firecrawl** is not designed for custom agent loops. Its LLM usage is internal to its extract mode (using an LLM to structure crawled content). It does not expose a browser session that an external LLM can drive interactively. Marked N/A because the tool does not support the pattern.
+**[Firecrawl](https://docs.firecrawl.dev/features/interact)** is not designed for custom agent loops. Its LLM usage is internal to its extract mode (using an LLM to structure crawled content). It does not expose a browser session that an external LLM can drive interactively. Marked N/A because the tool does not support the pattern.
 
-**Hyperbrowser** provides an agent integration layer with built-in support for Claude (via Anthropic SDK), OpenAI (GPT models), and Google Gemini. Codex models would need to go through OpenAI's API. The developer can also bypass the agent layer and use the raw Playwright/Puppeteer session with any LLM.
+**[Hyperbrowser](https://hyperbrowser.ai/docs/hyperagent/llm-providers)** provides an agent integration layer with built-in support for [Claude, OpenAI, and Google Gemini](https://hyperbrowser.ai/docs/hyperagent/llm-providers) as LLM providers. Codex models would need to go through OpenAI's API. The developer can also bypass the agent layer and use the [raw Playwright/Puppeteer session](https://hyperbrowser.ai/docs/sessions/playwright) with any LLM.
 
 ## Cost Estimation
 
@@ -83,6 +83,8 @@ The event discovery agent uses a custom agent loop (Option A in the PRD) where a
 | Search flows (customer) | 5 | As specified — includes verifying saved results persist |
 | Auth flows | 3 | One login per user type |
 | Total interactions | ~200 | 24 page-roles x 8 interactions + search flows + auth |
+| API requests captured | ~400-1,000 | ~2-5 API calls per interaction (navigation, data fetches, mutations) |
+| API responses captured | ~400-1,000 | Paired with requests — response bodies provide data shapes and property names |
 | Active browser time | ~30-45 min | ~4 sec per interaction (navigate, capture, interpret) + setup |
 
 ### LLM Token Estimates
@@ -124,7 +126,7 @@ Prices are Anthropic first-party API rates (per 1M tokens). OpenAI prices are ap
 | **Browser Use Cloud** | $0.06/browser-hour | **~$0.05** | ~45 min of browser time |
 | **Browserbase (Stagehand)** | Free: 1 hr; then $0.12-$0.20/hr | **$0.00** (free tier) | Free tier covers this scenario |
 | **Anthropic Computer Use** | No separate browser fee | **$0.00** | Cost is in LLM tokens only (~1,000-1,800 tokens per screenshot; total LLM cost would be significantly higher due to screenshot-based approach) |
-| **Firecrawl** | 2 credits/browser-min (Interact) | **~90 credits** | ~45 min x 2 credits/min; Standard plan: $99/100k credits |
+| **Firecrawl** | 7 credits/browser-min (Interact prompt); 2 credits/min (code-only) | **~315 credits** (prompt) / **~90 credits** (code) | ~45 min; Standard plan: $99/100k credits |
 | **Hyperbrowser** | Credit-based | **Varies** | Free: 5,000 credits; Startup: $30/30k credits |
 
 ### Total Estimated Cost (Browser + LLM)
