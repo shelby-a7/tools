@@ -15,6 +15,7 @@ pre-commit install
 
 ```
 tools/
+├── tracking-plan-template/ # Product analytics tracking plan template
 ├── docs/
 │   ├── adr/                    # Architecture Decision Records
 │   └── development-resources/  # Development guides and templates
@@ -28,6 +29,7 @@ tools/
 ## Development Resources
 
 - **[AI Development Reference](docs/development-resources/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
+- **[Tracking Plan Template](tracking-plan-template/)** — Tool-agnostic template for product analytics implementation plans. Covers SDK setup, event taxonomy, phased rollout, QA checklists, and architecture reference.
 
 ## Architecture Decisions
 
