@@ -87,14 +87,16 @@ The LLM reasoning layer drives the process; the browser automation layer execute
 
 The browser automation tooling must provide the following capabilities:
 
-| Capability | Requirement |
-|---|---|
-| **Network observation** | Capture every API call the application makes — method, URL, request body, response body. This is the richest signal for discovering what the app tracks and what data flows where. |
-| **JavaScript evaluation** | Inject observers into the page — hook `fetch`/`XMLHttpRequest`, install MutationObservers, read `localStorage`/`sessionStorage` state, inspect framework-specific stores (Redux, Vuex, Pinia). |
-| **Accessibility tree snapshots** | Produce a structured description of the current UI state that is already semantic (roles, labels, hierarchy) — far better than raw HTML for the reasoning layer to interpret. |
-| **Console and error capture** | Capture what the application logs, including analytics SDK calls that fire during interactions. |
-| **Interaction primitives** | Click, fill, select, navigate, and handle dialogs/popups/file choosers. Locators must auto-wait for element actionability. |
-| **Multi-page and frame handling** | Follow popups, new tabs, and iframes — all within one browser context sharing cookies and session state. |
+| Capability | Requirement | Playwright Example |
+|---|---|---|
+| **Network observation** | Capture every API call the application makes — method, URL, request body, response body. This is the richest signal for discovering what the app tracks and what data flows where. | `page.on('request')`, `page.on('response')`, `response.json()` |
+| **JavaScript evaluation** | Inject observers into the page — hook `fetch`/`XMLHttpRequest`, install MutationObservers, read `localStorage`/`sessionStorage` state, inspect framework-specific stores (Redux, Vuex, Pinia). | `page.addInitScript()`, `page.evaluate()`, `page.exposeFunction()` |
+| **Accessibility tree snapshots** | Produce a structured description of the current UI state that is already semantic (roles, labels, hierarchy) — far better than raw HTML for the reasoning layer to interpret. | `page.ariaSnapshot({ mode: 'ai' })` |
+| **Console and error capture** | Capture what the application logs, including analytics SDK calls that fire during interactions. | `page.on('console')`, `page.on('pageerror')` |
+| **Interaction primitives** | Click, fill, select, navigate, and handle dialogs/popups/file choosers. Locators must auto-wait for element actionability. | `locator.click()`, `locator.fill()`, `getByRole()`, `getByText()` |
+| **Multi-page and frame handling** | Follow popups, new tabs, and iframes — all within one browser context sharing cookies and session state. | `context.on('page')`, `page.on('popup')`, `page.frameLocator()` |
+
+The Playwright Example column shows one implementation of each requirement. These APIs are Playwright-specific; other browser automation tools provide equivalent capabilities through different interfaces. See the [Browser Automation Options Evaluation](./browser-automation-options.md) for a comparison across tools.
 
 #### Exploration Approach
 

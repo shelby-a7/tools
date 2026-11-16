@@ -5,6 +5,7 @@ Product requirements and specifications for the Tracking Plan Agent — an agent
 ## Contents
 
 - **[PRD.md](PRD.md)** — Product Requirements Document. Defines the agent's scope, architecture, functional requirements, and implementation approach.
+- **[browser-automation-options.md](browser-automation-options.md)** — Evaluation of browser automation tools against the PRD's capability requirements, LLM compatibility, and cost estimates.
 
 ## Related
 
