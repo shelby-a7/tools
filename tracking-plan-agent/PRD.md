@@ -114,7 +114,9 @@ A dynamic web app has a state graph, not a page tree. The agent must follow this
 **3. Auth-gated exploration.** The agent needs credentials for each user role (e.g. anonymous, registered, subscriber, admin). Run the crawl once per role to discover role-specific features and states.
 
 **4. Capture signals, not just clicks.** For each interaction, record:
-   - **Network delta** — API calls that fired (method, endpoint, request/response shapes)
+   - **Network delta** — API calls that fired:
+     - **Request**: method, URL, headers, request body
+     - **Response**: status code, response body, content type
    - **URL change** — Did the route change? (candidate page view)
    - **DOM mutation** — Did a modal open? Did content update? Did a form appear?
    - **Storage change** — Did `localStorage`/`sessionStorage`/cookies change?
