@@ -1,8 +1,8 @@
-# PRD: Tracking Plan Agent
+# PRD: Tracking Plan Generator
 
 ## 1. Overview
 
-The Tracking Plan Agent is an agentic process that automates three stages of analytics tracking plan development:
+The Tracking Plan Generator is an automated process that produces a completed tracking plan through three stages:
 
 1. **Event Discovery** — Identify and inventory the events, values, and states that need to be tracked on a client's web application.
 2. **Taxonomy Generation** — Transform the raw event inventory into a structured event taxonomy.
@@ -50,7 +50,7 @@ Interactive exploration is more expensive: more LLM tokens per discovery (DOM sn
 
 Internal tool — agentic workflow.
 
-The Tracking Plan Agent is a task-specific autonomous workflow that takes a web application as input and produces a completed tracking plan as output. It is not a consumer-facing product.
+The Tracking Plan Generator is a task-specific autonomous workflow that takes a web application as input and produces a completed tracking plan as output. It is not a consumer-facing product.
 
 | Attribute | Value |
 |---|---|
