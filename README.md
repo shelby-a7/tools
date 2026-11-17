@@ -15,11 +15,11 @@ pre-commit install
 
 ```
 tools/
-├── tracking-plan-generator/ # PRD and specs for the Tracking Plan Generator
-├── tracking-plan-template/ # Product analytics tracking plan template
+├── ai-development-reference/  # Portable project context template
+├── tracking-plan-generator/   # PRD and specs for the Tracking Plan Generator
+├── tracking-plan-template/    # Product analytics tracking plan template
 ├── docs/
-│   ├── adr/                    # Architecture Decision Records
-│   └── development-resources/  # Development guides and templates
+│   └── adr/                   # Architecture Decision Records
 ├── .github/                # CI workflows, issue/PR templates, CODEOWNERS, Dependabot
 ├── CHANGELOG.md            # Changelog policy and format
 ├── CONTRIBUTING.md         # Contribution guidelines
@@ -29,7 +29,7 @@ tools/
 
 ## Development Resources
 
-- **[AI Development Reference](docs/development-resources/ai-development-reference.md)** — Portable context document for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
+- **[AI Development Reference](ai-development-reference/)** — Portable context template for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
 - **[Tracking Plan Generator](tracking-plan-generator/)** — PRD and specifications for an automated process that produces a completed tracking plan through event discovery, taxonomy generation, and tracking plan creation.
 - **[Tracking Plan Template](tracking-plan-template/)** — Tool-agnostic template for product analytics implementation plans. Covers SDK setup, event taxonomy, phased rollout, QA checklists, and architecture reference.
 
