@@ -1,6 +1,6 @@
 # Browser Automation Options Evaluation
 
-Reference comparison of browser automation tools for the [Tracking Plan Agent](PRD.md) event discovery stage. Evaluates each tool against the six [Browser Automation Layer Requirements](PRD.md#browser-automation-layer-requirements), LLM compatibility for a custom agent loop, and estimated cost for a representative scenario.
+Reference comparison of browser automation tools for the [Tracking Plan Generator](PRD.md) event discovery stage. Evaluates each tool against the six [Browser Automation Layer Requirements](PRD.md#browser-automation-layer-requirements), LLM compatibility for a custom agent loop, and estimated cost for a representative scenario.
 
 ## Tools Evaluated
 
