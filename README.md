@@ -16,6 +16,7 @@ pre-commit install
 ```
 tools/
 ├── ai-development-reference/  # Portable project context template
+├── map-landscape-report/      # Quarterly MAP landscape research agent
 ├── tracking-plan-generator/   # PRD and specs for the Tracking Plan Generator
 ├── tracking-plan-template/    # Product analytics tracking plan template
 ├── docs/
@@ -30,6 +31,7 @@ tools/
 ## Development Resources
 
 - **[AI Development Reference](ai-development-reference/)** — Portable context template for any contributor or agent continuing development of a project. Covers requirements traceability, build process, development steps, QA records, environment setup, and handoff procedures.
+- **[MAP Landscape Report](map-landscape-report/)** — Quarterly research agent that produces evidence-grounded reports on agentic lifecycle marketing automation platforms. Covers three segments (B2B SaaS, B2C/DTC, B2B PLG) with strict inclusion criteria and versioned diffs. Scheduled via n8n.
 - **[Tracking Plan Generator](tracking-plan-generator/)** — PRD and specifications for an automated process that produces a completed tracking plan through event discovery, taxonomy generation, and tracking plan creation.
 - **[Tracking Plan Template](tracking-plan-template/)** — Tool-agnostic template for product analytics implementation plans. Covers SDK setup, event taxonomy, phased rollout, QA checklists, and architecture reference.
 

@@ -1,0 +1,14 @@
+# Changelog
+
+All notable changes to the MAP Landscape Report agent will be documented in this file.
+
+## [Unreleased]
+
+### 2026-11-25
+
+#### Added
+- Initial agent definition following Eve directory conventions.
+- Agent instructions adapted from the `agentic-lifecycle-platforms-research` skill.
+- Google Drive tool stubs for read/write operations.
+- n8n quarterly schedule configuration.
+- README with setup instructions and environment variable reference.
