@@ -21,6 +21,7 @@ All notable changes to the MAP Landscape Analysis Agent will be documented in th
 - Removed stale references to deleted skills (`run-segment-report`, `research-segment`) from `build-segment-report/SKILL.md` and `diff-reports/SKILL.md` descriptions.
 - Added "Input (already in context)" section to `diff-reports/SKILL.md` documenting the two markdown reports the skill expects to find in context.
 - Clarified `instructions.md` step 5 sequencing: read the prior report first, then invoke the diff skill once both reports are in context. Removed "(conditional)" from the step header.
+- Added "Input (already in context)" section to `report-storage/SKILL.md` documenting the market segment, completed report, and optional change-log diff.
 
 ### 2026-11-25
 
