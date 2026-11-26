@@ -1,12 +1,13 @@
 # Changelog
 
-All notable changes to the MAP Landscape Report agent will be documented in this file.
+All notable changes to the MAP Landscape Analysis Agent will be documented in this file.
 
 ## [Unreleased]
 
 ### 2026-11-26
 
 #### Changed
+- Renamed agent from `map-landscape-report` to `map-landscape-analysis-agent`.
 - Restructured `instructions.md` into a concise system message declaring identity, constraints, segments, tone, skills, and tools.
 - Split monolithic procedure into four skills following the standardized Claude skill convention (directory + `SKILL.md` with `name`/`description` YAML frontmatter):
   - `run-segment-report/` — orchestrator

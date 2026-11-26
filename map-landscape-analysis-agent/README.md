@@ -1,4 +1,4 @@
-# MAP Landscape Report
+# MAP Landscape Analysis Agent
 
 Quarterly research agent that produces evidence-grounded reports on commercially available agentic lifecycle marketing automation platforms (MAPs).
 
@@ -25,7 +25,7 @@ Each run covers exactly one segment:
 ## Directory structure
 
 ```
-map-landscape-report/
+map-landscape-analysis-agent/
 ├── agent.ts              # Agent config (model, reasoning effort)
 ├── instructions.md       # System message (identity, constraints, tone, skill/tool declarations)
 ├── tools/
