@@ -26,18 +26,24 @@ Each run covers exactly one segment:
 
 ```
 map-landscape-report/
-├── agent.ts            # Agent config (model, reasoning effort)
-├── instructions.md     # Concise system message (identity, constraints, tone)
+├── agent.ts              # Agent config (model, reasoning effort)
+├── instructions.md       # System message (identity, constraints, tone, skill/tool declarations)
 ├── tools/
-│   └── google-drive.ts # Google Drive read/write tool definitions
+│   └── google-drive.ts   # Google Drive read/write tool definitions
 ├── skills/
-│   ├── run-segment-report.md  # Orchestrator: retrieves prior report, runs skills, writes output
-│   ├── research-segment.md    # Web research: gathers raw platform data
-│   ├── build-segment-report.md # Analysis + drafting with embedded report template
-│   └── diff-reports.md        # Change-log diff with embedded diff template
+│   ├── run-segment-report/
+│   │   └── SKILL.md      # Orchestrator: retrieves prior report, runs skills, writes output
+│   ├── research-segment/
+│   │   └── SKILL.md      # Web research: gathers raw platform data
+│   ├── build-segment-report/
+│   │   ├── SKILL.md      # Analysis + drafting
+│   │   └── references/
+│   │       └── report-template.md  # Locked report template
+│   └── diff-reports/
+│       └── SKILL.md      # Change-log diff with embedded diff template
 ├── schedules/
-│   └── quarterly.ts    # n8n schedule config and setup notes
-├── sandbox/            # Reserved for sandboxed execution
+│   └── quarterly.ts      # n8n schedule config and setup notes
+├── sandbox/              # Reserved for sandboxed execution
 ├── README.md
 └── CHANGELOG.md
 ```

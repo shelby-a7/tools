@@ -1,16 +1,11 @@
 ---
-name: diff-reports
-description: Compare the current segment report against the prior report and produce a structured change log.
-inputs:
-  current_report: The report just produced by build-segment-report
-  prior_report: The most recent prior report read from Google Drive
-outputs:
-  diff: The change-log diff in markdown, following the template below
+name: "diff-reports"
+description: "Compare the current segment report against the prior report and produce a structured change log. Called by run-segment-report after build-segment-report completes. Only invoked when a prior report exists."
 ---
 
 # Diff Reports
 
-Compare two consecutive reports for the same segment and produce a structured change log. This skill is only invoked when a prior report exists.
+Compare two consecutive reports for the same segment and produce a structured change log. This skill is mechanical comparison — it does not rewrite or reinterpret the reports.
 
 ## Instructions
 
