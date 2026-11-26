@@ -9,13 +9,13 @@
 //
 // n8n workflow steps:
 //   1. Cron trigger (quarterly schedule above)
-//   2. Set segment parameter (one of: b2b-saas, b2c-dtc, b2b-plg)
+//   2. Set market segment parameter (one of: b2b-saas, b2c-dtc, b2b-plg)
 //   3. Call Claude API with:
 //      - model: claude-opus-5-5
 //      - system prompt: contents of ../instructions.md
 //      - tools: web_search_20260209 (server-side)
-//      - message: "Run the MAP landscape report for {segment}"
-//   4. Google Drive node: write report output to Platform Reports/{segment}/
+//      - message: "Run the MAP landscape report for {market-segment}"
+//   4. Google Drive node: write report output to Platform Reports/{market-segment}/
 //   5. (Optional) Notification node: email/Slack summary on completion
 //
 // Environment variables required in n8n:
@@ -24,11 +24,11 @@
 //   [GOOGLE_SERVICE_ACCOUNT]  — Google service account credentials (JSON)
 //
 // To run all three segments in a single quarter, trigger the workflow
-// three times with different segment values, or use an n8n loop node.
+// three times with different market segment values, or use an n8n loop node.
 
 export const schedule = {
   cron: "0 9 1 1,4,7,10 *",
   timezone: "America/New_York",
-  description: "Quarterly MAP landscape research — runs once per quarter per segment",
+  description: "Quarterly MAP landscape research — runs once per quarter per market segment",
   managedBy: "n8n",
 };

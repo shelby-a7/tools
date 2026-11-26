@@ -1,11 +1,11 @@
 ---
 name: "diff-reports"
-description: "Compare the current segment report against the prior report and produce a structured change log. Called by run-segment-report after build-segment-report completes. Only invoked when a prior report exists."
+description: "Compare the current market segment report against the prior report and produce a structured change log. Called by run-segment-report after build-segment-report completes. Only invoked when a prior report exists."
 ---
 
 # Diff Reports
 
-Compare two consecutive reports for the same segment and produce a structured change log. This skill is mechanical comparison — it does not rewrite or reinterpret the reports.
+Compare two consecutive reports for the same market segment and produce a structured change log. This skill is mechanical comparison — it does not rewrite or reinterpret the reports.
 
 ## Instructions
 
@@ -16,7 +16,7 @@ Compare two consecutive reports for the same segment and produce a structured ch
 ## Diff template
 
 ```markdown
-# Change log — [Segment Name]
+# Change log — [Market Segment Name]
 ## Current report date: YYYY-MM-DD
 ## Previous report date: YYYY-MM-DD
 ## Days elapsed: [N]
@@ -34,7 +34,7 @@ Only include platforms whose G2/Capterra/TrustRadius score changed by ±0.2 or m
 Any change in publicly disclosed pricing, tier structure, or opacity status.
 
 ## Positioning / capability changes
-Vendor pivoted, launched a new agent product, added a channel, changed autonomy boundary, changed target segment.
+Vendor pivoted, launched a new agent product, added a channel, changed autonomy boundary, changed target market segment.
 
 ## Corporate events
 Funding rounds, acquisitions, IPO, leadership changes, shutdowns. Cite primary sources.

@@ -1,9 +1,9 @@
 ---
 name: "build-segment-report"
-description: "Analyze research findings and draft the structured segment report. Called by run-segment-report after research-segment completes. Takes raw per-platform data and produces the final report following a locked template."
+description: "Analyze research findings and draft the structured market segment report. Called by run-segment-report after research-segment completes. Takes raw per-platform data and produces the final report following a locked template."
 ---
 
-# Build Segment Report
+# Build Market Segment Report
 
 Take the raw research findings from `research-segment` and produce the final report. This skill is analysis and writing — the research is already done.
 

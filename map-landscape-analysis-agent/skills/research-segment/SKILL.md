@@ -3,7 +3,7 @@ name: "research-segment"
 description: "Conduct web research on agentic MAP platforms for a specific market segment. Called by run-segment-report. Produces structured per-platform findings with sources — raw data, not analysis or prose."
 ---
 
-# Research Segment
+# Research Market Segment
 
 Gather raw platform data for one market segment. This skill produces structured findings only — it does not analyze, rank, group, or draft prose. That work belongs to `build-segment-report`.
 
@@ -19,7 +19,7 @@ This skill depends on Advanced Research (`launch_extended_search_task`). Before 
 - Apply the strict true-agent definition from `instructions.md` as the inclusion filter.
 - Apply the locked exclusion list from `instructions.md`, with a light re-check of each excluded vendor for genuine new agent products.
 - Enforce the sourcing discipline from `instructions.md`.
-- Cover the segment-specific scope from `instructions.md`.
+- Cover the market segment-specific scope from `instructions.md`.
 - Hunt for vendors launched, repositioned, or acquired since the prior report date.
 - Flag corporate events (funding, M&A, leadership changes, shutdowns) affecting roadmaps.
 - Collect ratings from G2, Capterra, TrustRadius, and Gartner with actual scores and review counts.

@@ -12,11 +12,11 @@ For a single market segment, the agent:
 4. Generates a change-log diff against the prior report (if one exists)
 5. Writes both files to Google Drive
 
-## Segments
+## Market Segments
 
-Each run covers exactly one segment:
+Each run covers exactly one market segment:
 
-| Segment | Focus |
+| Market Segment | Focus |
 |---|---|
 | **B2B SaaS lead-gen** | Email/SMS/push lifecycle + AI copy + behavioral decisioning |
 | **B2C/DTC** | Same channel mix, denser field, ranked by autonomy + ratings |
@@ -81,7 +81,7 @@ Platform Reports/           ← [GOOGLE_DRIVE_FOLDER_ID]
   └── b2b-plg/
 ```
 
-Files follow the naming convention `YYYY-MM-DD_<segment>_report.md` and `YYYY-MM-DD_<segment>_diff-vs-previous.md`.
+Files follow the naming convention `YYYY-MM-DD_<market-segment>_report.md` and `YYYY-MM-DD_<market-segment>_diff-vs-previous.md`.
 
 ## Report quality controls
 
