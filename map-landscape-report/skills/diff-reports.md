@@ -1,6 +1,24 @@
-# Diff Template
+---
+name: diff-reports
+description: Compare the current segment report against the prior report and produce a structured change log.
+inputs:
+  current_report: The report just produced by build-segment-report
+  prior_report: The most recent prior report read from Google Drive
+outputs:
+  diff: The change-log diff in markdown, following the template below
+---
 
-Locked template for the change-log diff between consecutive runs. Only produce this when a prior report exists for the segment.
+# Diff Reports
+
+Compare two consecutive reports for the same segment and produce a structured change log. This skill is only invoked when a prior report exists.
+
+## Instructions
+
+1. Compare the two reports field by field — the standardized per-platform template makes this mechanical.
+2. For each section of the diff template below, include only material changes. If a section has nothing, say "No changes."
+3. Target 500–1,500 words. If nothing material changed across the entire report, say so plainly in a single paragraph and skip the template.
+
+## Diff template
 
 ```markdown
 # Change log — [Segment Name]

@@ -31,9 +31,10 @@ map-landscape-report/
 ├── tools/
 │   └── google-drive.ts # Google Drive read/write tool definitions
 ├── skills/
-│   ├── run-segment-report.md  # 5-step end-to-end procedure
-│   ├── report-template.md     # Locked per-platform report structure
-│   └── diff-template.md       # Locked change-log diff structure
+│   ├── run-segment-report.md  # Orchestrator: retrieves prior report, runs skills, writes output
+│   ├── research-segment.md    # Web research: gathers raw platform data
+│   ├── build-segment-report.md # Analysis + drafting with embedded report template
+│   └── diff-reports.md        # Change-log diff with embedded diff template
 ├── schedules/
 │   └── quarterly.ts    # n8n schedule config and setup notes
 ├── sandbox/            # Reserved for sandboxed execution

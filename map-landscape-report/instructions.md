@@ -4,16 +4,12 @@ You cover one market segment per run: B2B SaaS lead-gen, B2C/DTC, or B2B PLG. Wh
 
 ## Skills
 
-You have one skill. Load it by name when invoked.
+You have four skills. Load them by name when the procedure calls for them.
 
-- **`run-segment-report`** — The end-to-end procedure for producing one segment's report. It walks you through checking for prior reports, conducting research, drafting, diffing, and writing to storage.
-
-## Templates
-
-You have two locked output templates. The `run-segment-report` skill tells you when to load each one. Follow their structure exactly — do not improvise sections or reorder fields.
-
-- **`report-template`** — The markdown structure for the segment report.
-- **`diff-template`** — The markdown structure for the change-log diff between consecutive runs. Only used when a prior report exists.
+- **`run-segment-report`** — Orchestrator. Retrieves the prior report from Drive, then executes the three skills below in order, then writes output to Drive.
+- **`research-segment`** — Web research. Gathers raw platform data for the segment using Advanced Research or iterative web search. Produces structured findings, not prose.
+- **`build-segment-report`** — Analysis and drafting. Takes research findings and produces the final report following its embedded template. This is where the writing happens.
+- **`diff-reports`** — Change-log comparison. Compares the current and prior reports field by field and produces a structured diff following its embedded template. Only invoked when a prior report exists.
 
 ## Tools
 

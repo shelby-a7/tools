@@ -1,15 +1,18 @@
+---
+name: run-segment-report
+description: Orchestrate a full quarterly MAP landscape report for one market segment.
+inputs:
+  segment: The market segment to report on (b2b-saas, b2c-dtc, or b2b-plg)
+outputs:
+  report_file: The segment report written to Google Drive
+  diff_file: The change-log diff written to Google Drive (omitted on first run)
+---
+
 # Run Segment Report
 
-End-to-end procedure for producing one segment's quarterly MAP landscape report. Load the `report-template` and `diff-template` skills when you reach the drafting and diffing steps.
+Orchestrates the three skills that produce a quarterly report. Execute them in order.
 
-## Prerequisites
-
-This procedure depends on Advanced Research (`launch_extended_search_task`). Before starting:
-
-1. Check whether Advanced Research is available. If not, stop and tell the user to toggle the Research feature on, then re-invoke.
-2. If the user explicitly opts to proceed without it, fall back to iterative `web_search` and `web_fetch`. Note in the report's Caveats section: "This run used iterative web search rather than Advanced Research; coverage may be narrower than a full research run."
-
-## Step 1: Confirm segment and check for prior reports
+## Step 1: Confirm segment and retrieve prior report
 
 If the segment is ambiguous, ask which one (single question, three options). Otherwise proceed.
 
@@ -24,40 +27,31 @@ Platform Reports/
   └── b2b-plg/
 ```
 
-1. Query Google Drive for children of `[YOUR_GOOGLE_DRIVE_FOLDER_ID]` matching the segment subfolder name.
-2. If the subfolder exists, list its files and read the most recent `YYYY-MM-DD_<segment>_report.md` as the diff baseline.
-3. If the subfolder does not exist, create it and treat this as a first run.
+1. Call `readDriveFolder([YOUR_GOOGLE_DRIVE_FOLDER_ID])` to find the segment subfolder.
+2. If the subfolder exists, list its files and call `readDriveFile` on the most recent `YYYY-MM-DD_<segment>_report.md`. This is the diff baseline.
+3. If the subfolder does not exist, treat this as a first run (no baseline).
 
 If Drive is unavailable, degrade gracefully: write output to a local directory and tell the user to save manually.
 
-## Step 2: Conduct fresh research
+## Step 2: Execute `research-segment`
 
-Use `launch_extended_search_task` (or iterative web search if opted in). Direct the research to:
+Pass the segment and the prior report date (if any) to the `research-segment` skill.
 
-- Apply the strict true-agent definition as the inclusion filter
-- Apply the locked exclusion list, with a light re-check of each excluded vendor
-- Enforce sourcing discipline
-- Cover the segment-specific scope from `instructions.md`
-- Hunt for vendors launched, repositioned, or acquired since the prior report date
-- Flag corporate events affecting roadmaps
+## Step 3: Execute `build-segment-report`
 
-Do NOT seed the research with a vendor list. Fresh discovery each run reduces anchoring bias.
+Pass the segment and the research output to the `build-segment-report` skill.
 
-## Step 3: Draft the report
+## Step 4: Execute `diff-reports`
 
-Load the `report-template` and follow its structure exactly. Target 4,000–7,000 words for 8–15 platforms.
+If no prior report exists, skip this step and note in the report that this is the baseline run.
 
-## Step 4: Generate the diff
-
-If no prior report exists, skip this step and note in the report that this is the baseline.
-
-If a prior report exists, load the `diff-template` and produce a separate diff file. Target 500–1,500 words. If nothing material changed, say so plainly.
+If a prior report exists, pass the current report and the prior report to the `diff-reports` skill.
 
 ## Step 5: Write to storage and report to user
 
-Write both files (or just the report on first run) to the Drive segment subfolder using:
+Call `writeDriveFile` for each output file in the segment subfolder:
 - `YYYY-MM-DD_<segment>_report.md`
-- `YYYY-MM-DD_<segment>_diff-vs-previous.md`
+- `YYYY-MM-DD_<segment>_diff-vs-previous.md` (if a prior report existed)
 
 Use the current date in America/New_York timezone.
 

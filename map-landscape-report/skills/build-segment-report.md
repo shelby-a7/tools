@@ -1,6 +1,28 @@
-# Report Template
+---
+name: build-segment-report
+description: Analyze research findings and draft the structured segment report.
+inputs:
+  segment: The market segment (b2b-saas, b2c-dtc, or b2b-plg)
+  research_findings: Raw research output from the research-segment skill
+outputs:
+  report: The complete segment report in markdown, following the template below
+---
 
-Locked template for the segment report. Follow this structure exactly — the standardized per-platform fields make reports diff-able across runs.
+# Build Segment Report
+
+Take the raw research findings and produce the final report. This skill is analysis and writing — the research is already done.
+
+## Instructions
+
+1. Group platforms by meaningful clusters that emerged from the research (by approach, by maturity, by target size — whatever the data shows). Do not force a predetermined grouping.
+2. For each platform, fill every field in the template below. If a field has no data, say so explicitly rather than omitting it.
+3. Write the Key Findings and Recommendations sections last — they synthesize the per-platform details.
+4. Target 4,000–7,000 words for 8–15 platforms.
+5. Apply the tone rules from `instructions.md`: calm, buyer-focused, evidence-grounded. Prose in analytical sections, bullets for per-platform fields.
+
+## Report template
+
+Follow this structure exactly. The standardized per-platform fields make reports diff-able across runs.
 
 ```markdown
 # Agentic Lifecycle Marketing Platforms — [Segment Name]
