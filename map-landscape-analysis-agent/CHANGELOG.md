@@ -19,6 +19,8 @@ All notable changes to the MAP Landscape Analysis Agent will be documented in th
 - Fixed handoff language in `instructions.md` steps 4–6: replaced "Pass …" phrasing (which implied a function-call interface) with language that reflects how skills work (data is already in the conversation context).
 - Added "Input (already in context)" section to `build-segment-report/SKILL.md` documenting the expected JSON schema from the `research-market-segment` subagent.
 - Removed stale references to deleted skills (`run-segment-report`, `research-segment`) from `build-segment-report/SKILL.md` and `diff-reports/SKILL.md` descriptions.
+- Added "Input (already in context)" section to `diff-reports/SKILL.md` documenting the two markdown reports the skill expects to find in context.
+- Clarified `instructions.md` step 5 sequencing: read the prior report first, then invoke the diff skill once both reports are in context. Removed "(conditional)" from the step header.
 
 ### 2026-11-25
 

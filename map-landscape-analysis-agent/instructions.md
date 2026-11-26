@@ -24,11 +24,11 @@ Spawn the `research-market-segment` subagent. Pass the market segment and the pr
 
 The research subagent's structured JSON output is now in context. Invoke the `build-segment-report` skill. The skill reads the research findings directly from context — it expects the subagent's output schema (`platforms` array, `exclusion_recheck` array, and metadata).
 
-### 5. Diffing (conditional)
+### 5. Diffing
 
 If no prior report exists, skip this step. Note in the report that this is the baseline run.
 
-If a prior report exists, read it now — call `readDriveFile` on the most recent report file identified in step 2. Then invoke the `diff-reports` skill. The current report (from step 4) and the prior report are both in context. The skill produces a structured change log.
+If a prior report exists, read it now — call `readDriveFile` on the most recent report file identified in step 2. Once the prior report is in context alongside the current report from step 4, invoke the `diff-reports` skill. The skill compares the two reports field by field and produces a structured change log.
 
 ### 6. Write output
 

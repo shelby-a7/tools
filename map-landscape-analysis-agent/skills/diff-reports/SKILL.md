@@ -7,6 +7,15 @@ description: "Compare the current market segment report against the prior report
 
 Compare two consecutive reports for the same market segment and produce a structured change log. This skill is mechanical comparison — it does not rewrite or reinterpret the reports.
 
+## Input (already in context)
+
+Two markdown reports for the same market segment, produced at different dates:
+
+- **Current report** — the report just drafted by the `build-segment-report` skill. Contains the report date, per-platform sections following the standardized template, Key Findings, and Recommendations.
+- **Prior report** — the most recent previous report, read from Google Drive via `readDriveFile`. Same structure as the current report but from an earlier run.
+
+Both follow the locked report template, so fields align one-to-one across reports.
+
 ## Instructions
 
 1. Compare the two reports field by field — the standardized per-platform template makes this mechanical.
