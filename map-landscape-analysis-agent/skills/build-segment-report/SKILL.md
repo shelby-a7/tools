@@ -1,11 +1,19 @@
 ---
 name: "build-segment-report"
-description: "Analyze research findings and draft the structured market segment report. Called by run-segment-report after research-segment completes. Takes raw per-platform data and produces the final report following a locked template."
+description: "Analyze research findings and draft the structured market segment report. Invoked after the research-market-segment subagent returns. Takes structured JSON findings from context and produces the final report following a locked template."
 ---
 
 # Build Market Segment Report
 
-Take the raw research findings from `research-segment` and produce the final report. This skill is analysis and writing — the research is already done.
+The `research-market-segment` subagent has returned structured JSON findings. They are already in context. This skill transforms those findings into the final report — analysis and writing, not research.
+
+## Input (already in context)
+
+The subagent's output is a JSON object with:
+
+- **`platforms`** — array of objects, one per qualifying platform. Each contains: `platform_name`, `company_legal_name`, `year_founded`, `latest_funding`, `ownership`, `key_leadership`, `agent_evidence`, `channels`, `data_integrations`, `ai_copy_model`, `decisioning_architecture`, `market_segment_fit`, `confirmed_customers`, `ratings` (with `g2`, `capterra`, `trustradius`, `gartner` sub-fields), `pricing`, `strengths`, `weaknesses`, `corporate_events`, `sources`.
+- **`exclusion_recheck`** — array of objects, one per excluded vendor. Each contains: `vendor`, `still_excluded`, `reason`.
+- **`market_segment`**, **`research_date`**, **`prior_report_date`**, **`research_method`** — metadata.
 
 ## Instructions
 

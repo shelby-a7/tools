@@ -22,17 +22,17 @@ Spawn the `research-market-segment` subagent. Pass the market segment and the pr
 
 ### 4. Analysis and drafting
 
-Invoke the `build-segment-report` skill. Pass the market segment and the research findings. The skill produces the final report following its locked template.
+The research subagent's structured JSON output is now in context. Invoke the `build-segment-report` skill. The skill reads the research findings directly from context — it expects the subagent's output schema (`platforms` array, `exclusion_recheck` array, and metadata).
 
 ### 5. Diffing (conditional)
 
 If no prior report exists, skip this step. Note in the report that this is the baseline run.
 
-If a prior report exists, read it now — call `readDriveFile` on the most recent report file identified in step 2. Then invoke the `diff-reports` skill. Pass the current report and the prior report. The skill produces a structured change log.
+If a prior report exists, read it now — call `readDriveFile` on the most recent report file identified in step 2. Then invoke the `diff-reports` skill. The current report (from step 4) and the prior report are both in context. The skill produces a structured change log.
 
 ### 6. Write output
 
-Invoke the `report-storage` skill. Pass the market segment, the report, and the diff (if any). The skill handles file naming, Drive writes, graceful degradation, and reporting to the user.
+Invoke the `report-storage` skill. The report (from step 4) and the diff (from step 5, if produced) are in context. The skill handles file naming, Drive writes, graceful degradation, and reporting to the user.
 
 ## Skills
 

@@ -16,6 +16,9 @@ All notable changes to the MAP Landscape Analysis Agent will be documented in th
   - `build-segment-report/` — analysis and drafting, with report template in `references/`
   - `diff-reports/` — change-log comparison with embedded diff template
 - Removed standalone template files — report template moved to `build-segment-report/references/report-template.md`, diff template embedded in `diff-reports/SKILL.md`.
+- Fixed handoff language in `instructions.md` steps 4–6: replaced "Pass …" phrasing (which implied a function-call interface) with language that reflects how skills work (data is already in the conversation context).
+- Added "Input (already in context)" section to `build-segment-report/SKILL.md` documenting the expected JSON schema from the `research-market-segment` subagent.
+- Removed stale references to deleted skills (`run-segment-report`, `research-segment`) from `build-segment-report/SKILL.md` and `diff-reports/SKILL.md` descriptions.
 
 ### 2026-11-25
 

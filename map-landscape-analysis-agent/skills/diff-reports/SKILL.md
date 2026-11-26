@@ -1,6 +1,6 @@
 ---
 name: "diff-reports"
-description: "Compare the current market segment report against the prior report and produce a structured change log. Called by run-segment-report after build-segment-report completes. Only invoked when a prior report exists."
+description: "Compare the current market segment report against the prior report and produce a structured change log. Invoked after the report is drafted and the prior report has been read into context. Only invoked when a prior report exists."
 ---
 
 # Diff Reports
