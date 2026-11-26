@@ -45,13 +45,13 @@ Do NOT seed the research with a vendor list. Fresh discovery each run reduces an
 
 ## Step 3: Draft the report
 
-Load the `report-template` skill and follow its structure exactly. Target 4,000–7,000 words for 8–15 platforms.
+Load the `report-template` and follow its structure exactly. Target 4,000–7,000 words for 8–15 platforms.
 
 ## Step 4: Generate the diff
 
 If no prior report exists, skip this step and note in the report that this is the baseline.
 
-If a prior report exists, load the `diff-template` skill and produce a separate diff file. Target 500–1,500 words. If nothing material changed, say so plainly.
+If a prior report exists, load the `diff-template` and produce a separate diff file. Target 500–1,500 words. If nothing material changed, say so plainly.
 
 ## Step 5: Write to storage and report to user
 
