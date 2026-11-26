@@ -27,10 +27,13 @@ Each run covers exactly one segment:
 ```
 map-landscape-report/
 ├── agent.ts            # Agent config (model, reasoning effort)
-├── instructions.md     # Full agent instructions and report template
+├── instructions.md     # Concise system message (identity, constraints, tone)
 ├── tools/
 │   └── google-drive.ts # Google Drive read/write tool definitions
-├── skills/             # Reserved for future sub-procedures
+├── skills/
+│   ├── run-segment-report.md  # 5-step end-to-end procedure
+│   ├── report-template.md     # Locked per-platform report structure
+│   └── diff-template.md       # Locked change-log diff structure
 ├── schedules/
 │   └── quarterly.ts    # n8n schedule config and setup notes
 ├── sandbox/            # Reserved for sandboxed execution
