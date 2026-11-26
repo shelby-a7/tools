@@ -12,7 +12,7 @@ Compare two consecutive reports for the same market segment and produce a struct
 Two markdown reports for the same market segment, produced at different dates:
 
 - **Current report** — the report just drafted by the `build-segment-report` skill. Contains the report date, per-platform sections following the standardized template, Key Findings, and Recommendations.
-- **Prior report** — the most recent previous report, read from Google Drive via `readDriveFile`. Same structure as the current report but from an earlier run.
+- **Prior report** — the most recent previous report, read from Google Drive via `read_drive_file`. Same structure as the current report but from an earlier run.
 
 Both follow the locked report template, so fields align one-to-one across reports.
 

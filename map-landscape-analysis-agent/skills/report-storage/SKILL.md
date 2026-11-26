@@ -37,8 +37,8 @@ Where `<market-segment>` is one of `b2b-saas`, `b2c-dtc`, `b2b-plg`.
 
 ## Write procedure
 
-1. Call `writeDriveFile` for the report file in the market segment subfolder.
-2. If a diff was produced, call `writeDriveFile` for the diff file in the same subfolder.
+1. Call `write_drive_file` for the report file in the market segment subfolder.
+2. If a diff was produced, call `write_drive_file` for the diff file in the same subfolder.
 
 ## Graceful degradation
 

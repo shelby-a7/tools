@@ -29,7 +29,10 @@ map-landscape-analysis-agent/
 ├── agent.ts              # Agent config (model, reasoning effort)
 ├── instructions.md       # System message (identity, constraints, tone, workflow, skill/tool declarations)
 ├── tools/
-│   └── google-drive.ts   # Google Drive read/write tool definitions
+│   └── google-drive/
+│       ├── server.py       # MCP server exposing Drive read/write tools
+│       ├── requirements.txt
+│       └── README.md       # Setup, credentials, Claude Code + n8n integration
 ├── subagents/
 │   └── research-market-segment/
 │       ├── agent.ts      # Subagent config (model, reasoning effort)
@@ -62,7 +65,8 @@ Runs quarterly via [n8n](https://n8n.io/), not Eve's built-in scheduler. See `sc
 
 - An Anthropic API key with access to `claude-opus-5-5`
 - A Google Drive folder for report storage
-- An n8n instance with the Cron and Google Drive nodes
+- Python 3.10+ with the MCP server dependencies (see `tools/google-drive/requirements.txt`)
+- An n8n instance for quarterly scheduling
 
 ### Environment variables
 
@@ -70,7 +74,11 @@ Runs quarterly via [n8n](https://n8n.io/), not Eve's built-in scheduler. See `sc
 |---|---|
 | `[ANTHROPIC_API_KEY]` | Claude API key |
 | `[GOOGLE_DRIVE_FOLDER_ID]` | Root "Platform Reports" folder ID in Google Drive |
-| `[GOOGLE_SERVICE_ACCOUNT]` | Google service account credentials (JSON) |
+| `[GOOGLE_SERVICE_ACCOUNT_KEY]` | Google service account credentials (JSON content) |
+
+### Google Drive MCP server
+
+The agent's Drive tools run as an MCP server. See `tools/google-drive/README.md` for installation, credential configuration, and how to connect it to Claude Code or n8n.
 
 ### Google Drive folder structure
 

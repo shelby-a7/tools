@@ -22,6 +22,8 @@ All notable changes to the MAP Landscape Analysis Agent will be documented in th
 - Added "Input (already in context)" section to `diff-reports/SKILL.md` documenting the two markdown reports the skill expects to find in context.
 - Clarified `instructions.md` step 5 sequencing: read the prior report first, then invoke the diff skill once both reports are in context. Removed "(conditional)" from the step header.
 - Added "Input (already in context)" section to `report-storage/SKILL.md` documenting the market segment, completed report, and optional change-log diff.
+- Replaced Eve-style tool stubs (`tools/google-drive.ts`) with an MCP server (`tools/google-drive/`). The server exposes `read_drive_folder`, `read_drive_file`, and `write_drive_file` over the MCP protocol using Python + FastMCP. Works with both Claude Code (conversational runs) and n8n (scheduled batch runs).
+- Updated all tool name references from camelCase to snake_case across `instructions.md`, `diff-reports/SKILL.md`, and `report-storage/SKILL.md`.
 
 ### 2026-11-25
 
