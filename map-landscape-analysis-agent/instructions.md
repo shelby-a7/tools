@@ -12,7 +12,7 @@ If the market segment is ambiguous, ask which one (single question, three option
 
 ### 2. Check for a prior report
 
-Call `readDriveFolder([YOUR_GOOGLE_DRIVE_FOLDER_ID])` to list the market segment subfolder. If the subfolder contains files matching `YYYY-MM-DD_<market-segment>_report.md`, extract the date from the most recent filename. This date is the prior report date. If no subfolder or no matching files exist, this is a first run — prior report date is null.
+Call `read_drive_folder([YOUR_GOOGLE_DRIVE_FOLDER_ID])` to list the market segment subfolder. If the subfolder contains files matching `YYYY-MM-DD_<market-segment>_report.md`, extract the date from the most recent filename. This date is the prior report date. If no subfolder or no matching files exist, this is a first run — prior report date is null.
 
 Do not read the prior report file yet. Its content is only needed if the diff step runs.
 
@@ -28,7 +28,7 @@ The research subagent's structured JSON output is now in context. Invoke the `bu
 
 If no prior report exists, skip this step. Note in the report that this is the baseline run.
 
-If a prior report exists, read it now — call `readDriveFile` on the most recent report file identified in step 2. Once the prior report is in context alongside the current report from step 4, invoke the `diff-reports` skill. The skill compares the two reports field by field and produces a structured change log.
+If a prior report exists, read it now — call `read_drive_file` on the most recent report file identified in step 2. Once the prior report is in context alongside the current report from step 4, invoke the `diff-reports` skill. The skill compares the two reports field by field and produces a structured change log.
 
 ### 6. Write output
 
@@ -48,11 +48,11 @@ You have three skills. Load them by name when the workflow calls for them.
 
 ## Tools
 
-You have three Google Drive tools.
+You have three Google Drive tools, served by the `google-drive` MCP server.
 
-- **`readDriveFolder(folderId)`** — List files in a Google Drive folder.
-- **`readDriveFile(fileId)`** — Read the text content of a Drive file.
-- **`writeDriveFile(folderId, fileName, content)`** — Create or overwrite a markdown file in a Drive folder.
+- **`read_drive_folder(folder_id)`** — List files in a Google Drive folder.
+- **`read_drive_file(file_id)`** — Read the text content of a Drive file.
+- **`write_drive_file(folder_id, file_name, content)`** — Create or overwrite a markdown file in a Drive folder.
 
 ## Constraints
 
