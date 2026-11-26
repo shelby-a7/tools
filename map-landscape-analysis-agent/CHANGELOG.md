@@ -9,9 +9,9 @@ All notable changes to the MAP Landscape Analysis Agent will be documented in th
 #### Changed
 - Renamed agent from `map-landscape-report` to `map-landscape-analysis-agent`.
 - Restructured `instructions.md` into a concise system message declaring identity, constraints, segments, tone, skills, and tools.
-- Split monolithic procedure into four skills following the standardized Claude skill convention (directory + `SKILL.md` with `name`/`description` YAML frontmatter):
+- Extracted web research into the `research-market-segment` subagent (`subagents/research-market-segment/`). Research runs in a separate context window and returns structured JSON findings, keeping the parent agent's context clean for analysis and writing.
+- Split remaining procedures into skills following the standardized Claude skill convention (directory + `SKILL.md` with `name`/`description` YAML frontmatter):
   - `run-segment-report/` — orchestrator
-  - `research-segment/` — web research (separated from analysis)
   - `build-segment-report/` — analysis and drafting, with report template in `references/`
   - `diff-reports/` — change-log comparison with embedded diff template (separated from analysis)
 - Removed standalone template files — report template moved to `build-segment-report/references/report-template.md`, diff template embedded in `diff-reports/SKILL.md`.

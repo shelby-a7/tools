@@ -7,7 +7,7 @@ Quarterly research agent that produces evidence-grounded reports on commercially
 For a single market segment, the agent:
 
 1. Checks Google Drive for the most recent prior report
-2. Conducts deep web research using a strict "true-agent" definition as the inclusion filter
+2. Spawns a research subagent that conducts deep web research using a strict "true-agent" definition as the inclusion filter
 3. Drafts a structured report (4,000–7,000 words) following a locked template
 4. Generates a change-log diff against the prior report (if one exists)
 5. Writes both files to Google Drive
@@ -27,14 +27,16 @@ Each run covers exactly one market segment:
 ```
 map-landscape-analysis-agent/
 ├── agent.ts              # Agent config (model, reasoning effort)
-├── instructions.md       # System message (identity, constraints, tone, skill/tool declarations)
+├── instructions.md       # System message (identity, constraints, tone, workflow, skill/tool declarations)
 ├── tools/
 │   └── google-drive.ts   # Google Drive read/write tool definitions
+├── subagents/
+│   └── research-market-segment/
+│       ├── agent.ts      # Subagent config (model, reasoning effort)
+│       └── instructions.md  # Subagent system prompt (constraints, research directives, output format)
 ├── skills/
 │   ├── run-segment-report/
 │   │   └── SKILL.md      # Orchestrator: retrieves prior report, runs skills, writes output
-│   ├── research-segment/
-│   │   └── SKILL.md      # Web research: gathers raw platform data
 │   ├── build-segment-report/
 │   │   ├── SKILL.md      # Analysis + drafting
 │   │   └── references/
