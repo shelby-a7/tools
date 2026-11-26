@@ -35,14 +35,14 @@ map-landscape-analysis-agent/
 │       ├── agent.ts      # Subagent config (model, reasoning effort)
 │       └── instructions.md  # Subagent system prompt (constraints, research directives, output format)
 ├── skills/
-│   ├── run-segment-report/
-│   │   └── SKILL.md      # Orchestrator: retrieves prior report, runs skills, writes output
 │   ├── build-segment-report/
 │   │   ├── SKILL.md      # Analysis + drafting
 │   │   └── references/
 │   │       └── report-template.md  # Locked report template
-│   └── diff-reports/
-│       └── SKILL.md      # Change-log diff with embedded diff template
+│   ├── diff-reports/
+│   │   └── SKILL.md      # Change-log diff with embedded diff template
+│   └── report-storage/
+│       └── SKILL.md      # Drive I/O: file naming, writes, degradation, user summary
 ├── schedules/
 │   └── quarterly.ts      # n8n schedule config and setup notes
 ├── sandbox/              # Reserved for sandboxed execution
